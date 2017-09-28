@@ -1,0 +1,25 @@
+{
+  "name": "chingu-dashboard",
+  "version": "1.0.1",
+  "description": "Chingu Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chingu-coders/Voyage2-Bears-24.git"
+  },
+  "keywords": [
+    "chingu",
+    "voyage2",
+    "freecodecamp",
+    "fcc"
+  ],
+  "author": "Voyage2-Bears-24",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chingu-coders/Voyage2-Bears-24/issues"
+  },
+  "homepage": "https://github.com/chingu-coders/Voyage2-Bears-24#readme"
+}
