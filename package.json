@@ -1,25 +1,44 @@
 {
-  "name": "chingu-dashboard",
-  "version": "1.0.1",
-  "description": "Chingu Dashboard",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chingu-coders/Voyage2-Bears-24.git"
-  },
-  "keywords": [
-    "chingu",
-    "voyage2",
-    "freecodecamp",
-    "fcc"
-  ],
-  "author": "Voyage2-Bears-24",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/chingu-coders/Voyage2-Bears-24/issues"
-  },
-  "homepage": "https://github.com/chingu-coders/Voyage2-Bears-24#readme"
+	"name": "chingu-dashboard",
+	"version": "1.0.1",
+	"description": "Chingu Dashboard",
+	"main": "./src/www.js",
+	"scripts": {},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/chingu-coders/Voyage2-Bears-24.git"
+	},
+	"engines": {
+		"node": ">=8.6.0"
+	},
+	"keywords": [
+		"chingu",
+		"voyage2",
+		"freecodecamp",
+		"fcc"
+	],
+	"author": "Voyage2-Bears-24",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/chingu-coders/Voyage2-Bears-24/issues"
+	},
+	"homepage": "https://github.com/chingu-coders/Voyage2-Bears-24#readme",
+	"dependencies": {},
+	"devDependencies": {
+		"@types/node": "8.0.31",
+		"@types/webpack": "3.0.12",
+		"babel-eslint": "8.0.1",
+		"eslint": "4.7.2",
+		"eslint-config-airbnb": "15.1.0",
+		"eslint-plugin-import": "2.7.0",
+		"eslint-plugin-jsx-a11y": "5.1.1",
+		"eslint-plugin-react": "7.4.0",
+		"fork-ts-checker-webpack-plugin": "0.2.8",
+		"rimraf": "2.6.2",
+		"thread-loader": "1.1.1",
+		"ts-loader": "2.3.7",
+		"typescript": "2.5.3",
+		"uglifyjs-webpack-plugin": "0.4.6",
+		"webpack": "3.6.0"
+	}
 }
