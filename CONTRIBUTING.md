@@ -36,19 +36,19 @@ For example:
 ### Writing commit messages
 * Use first person verbs
 * It's composed by three parts:
-	* Shortlog - (< 78 chars) Starts with capital letter and doesn't add a trailing period. Includes a tag and/or scope that explains what was changed. Additionally, includes the task ID you are working on. Then, has a short description
+	* Shortlog - (< 78 chars) Starts with capital letter and doesn't add a trailing period. Includes a tag and/or scope that explains what was changed. Additionally, include a short description
 	* Commit body - (Add new line after < 78 chars) Optional, if the shortlog doesn't explain enough. If complex changes were made, explain the reason for the changes
 
 #### Examples:
 
 Simple, self-explanatory:
 ```(git-commit)
-task(package.json) #1: Include socket.io as dependency
+task(package.json): Include socket.io as dependency
 ```
 
 Modifying several files and includying a commit body:
 ```(git-commit)
-feat(index.js, routes.js) back-end #2: Add route handler for path "/public"
+feat(index.js, routes.js) back-end: Add route handler for path "/public"
 
 A Route Handler function was added to routes.js, to handle requests
 for "/public" path, and exported. Imports routes.js in index.js to use
