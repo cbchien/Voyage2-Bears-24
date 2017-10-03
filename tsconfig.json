@@ -4,7 +4,7 @@
   "compilerOptions": {
     /* Basic Options */
     "target": "es5",
-    "module": "umd",
+    "module": "es6",
     "lib": [
       "dom",
       "es2015",
@@ -14,22 +14,26 @@
     "allowJs": true,
     "checkJs": true,
     "jsx": "react",
+    "diagnostics": true,
+    "importHelpers": true,
     "sourceMap": true,
     "outDir": "./build/",
-    "rootDir": "./src/",
+    "rootDir": "./",
     "removeComments": true, 
     "downlevelIteration": true,
+    "isolatedModules": true,
+    "allowUnreachableCode": false,
 
     /* Strict Type-Checking Options */
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "strictNullChecks": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
 
     /* Additional Checks */
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    // "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
 
@@ -44,7 +48,8 @@
     // "rootDirs": [],
     // "typeRoots": [],
     // "types": [],
-    // "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": true,
+    "listFiles": true,
 
     /* Source Map Options */
     // "sourceRoot": "./",
@@ -60,9 +65,12 @@
     "enable": true
   },
   "include": [
-    "./src/**/**.js"
+    "./src/client/**/**.js"
   ],
   "exclude": [
-    "node_modules/**"
+    "node_modules/**/**.js",
+    "build/**/**.js",
+    ".cache-loader/**/**.js",
+    "src/server/**/**.js"
   ]
 }
