@@ -2,6 +2,7 @@
 # https://github.com/github/gitignore/blob/master/Node.gitignore
 
 # own project ignored files:
+.cache-loader
 
 # Logs
 logs
