@@ -4,18 +4,17 @@ const webpack = require('webpack')
 const path = require('path')
 const os = require('os')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 let plugins = []
 let test = /\.js?$/
+let exclude = /node_modules/
 
-module.exports = (env) => {
-  if (!env.in) {
-    console.log('No input file was specified.')
-    process.exit(1)
-  }
+module.exports = (env = {}) => {
   if (env.prod) {
     plugins = [
+      new CleanWebpackPlugin(['build']),
+      new webpack.optimize.ModuleConcatenationPlugin(),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': `"production"`
       }),
@@ -24,11 +23,21 @@ module.exports = (env) => {
         debug: false
       }),
       new UglifyJSPlugin({
-        parallel: true,
-        sourceMap: false,
+        cache: true,
+        parallel: {
+          cache: true,
+          workers: os.cpus().length - 1
+        },
+        sourceMap: true,
         uglifyOptions: {
           compress: {
-            warnings: false
+            warnings: false,
+            dead_code: false
+          },
+          mangle: false,
+          output: {
+            comments: false,
+            beautify: false
           }
         }
       })
@@ -43,13 +52,17 @@ module.exports = (env) => {
   return {
     context: __dirname,
     devtool: 'source-map',
+    bail: true,
+    cache: true,
+    parallelism: 10,
+    target: 'node',
     entry: {
       [env.out || 'bundle']: env.in
     },
     output: {
       path: path.resolve(__dirname, 'build'),
       filename: '[name].js',
-      publicPath: '/build/',
+      publicPath: '/build/'
     },
     resolve: {
       extensions: ['.js']
@@ -58,15 +71,22 @@ module.exports = (env) => {
       rules: [
         {
           test,
+          exclude,
           loader: 'cache-loader'
         },
         {
+          enforce: 'pre',
           test,
-          loader: 'thread-loader',
-          options: { workers: os.cpus().length - 1 }
+          exclude,
+          loader: 'eslint-loader',
+          options: {
+            cache: true,
+            eslintPath: path.resolve(__dirname, 'node_modules/eslint')
+          }
         },
         {
           test,
+          exclude,
           loader: 'ts-loader',
           options: {
             entryFileIsJs: true,
@@ -75,6 +95,7 @@ module.exports = (env) => {
         },
         {
           test,
+          exclude,
           enforce: 'pre',
           loader: 'source-map-loader'
         },
