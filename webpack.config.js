@@ -30,8 +30,9 @@ module.exports = (env = {}) => {
         },
         sourceMap: true,
         uglifyOptions: {
+          ecma: 8,
           compress: {
-            warnings: false,
+            warnings: true,
             dead_code: false
           },
           mangle: false,
@@ -55,7 +56,7 @@ module.exports = (env = {}) => {
     bail: true,
     cache: true,
     parallelism: 10,
-    target: 'node',
+    target: 'web',
     entry: {
       [env.out || 'bundle']: env.in
     },
