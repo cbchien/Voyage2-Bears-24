@@ -1,0 +1,12 @@
+{
+  "eslint.enable": true,
+  "editor.tabSize": 2,
+  "editor.lineNumbers": "on",
+  "editor.insertSpaces": true,
+  "jsDocCompletion.enabled": true,
+  "files.insertFinalNewline": true,
+  "editor.renderWhitespace": "boundary",
+  "editor.wordWrap": "wordWrapColumn",
+  "files.eol": "\n",
+  "editor.wordWrapColumn": 85
+}

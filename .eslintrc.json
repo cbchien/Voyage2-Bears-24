@@ -1,0 +1,22 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "env": {
+    "node": true,
+    "browser": true,
+    "commonjs": true
+  },
+  "rules": {
+    "strict": 1,
+    "import/newline-after-import": "off",
+    "react/jsx-filename-extension": "off",
+    "func-style": [
+      "error",
+      "expression"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ]
+  }
+}
