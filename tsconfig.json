@@ -4,7 +4,7 @@
   "compilerOptions": {
     /* Basic Options */
     "target": "es5",
-    "module": "es6",
+    "module": "esnext",
     "lib": [
       "dom",
       "es2015",
@@ -14,7 +14,7 @@
     "allowJs": true,
     "checkJs": true,
     "jsx": "react",
-    "diagnostics": true,
+    "diagnostics": false,
     "importHelpers": true,
     "sourceMap": true,
     "outDir": "./build/",
@@ -33,7 +33,7 @@
 
     /* Additional Checks */
     "noUnusedLocals": true,
-    // "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
 
@@ -45,17 +45,9 @@
         "node_modules/*"
       ]
     },
-    // "rootDirs": [],
-    // "typeRoots": [],
-    // "types": [],
     "allowSyntheticDefaultImports": true,
-    "listFiles": true,
-
-    /* Source Map Options */
-    // "sourceRoot": "./",
-    // "mapRoot": "./",
-    // "inlineSourceMap": true,
-    // "inlineSources": true,
+    "listFiles": false,
+    "pretty": true,
 
     /* Experimental Options */
     "experimentalDecorators": true,
