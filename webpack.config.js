@@ -13,19 +13,19 @@ let exclude = /node_modules/
 module.exports = (env = {}) => {
   if (env.prod) {
     plugins = [
-      new CleanWebpackPlugin(['build']),
-      new webpack.optimize.ModuleConcatenationPlugin(),
+      new CleanWebpackPlugin(['build', '.cache-loader']),
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': `"production"`
+        'process.env': {
+          NODE_ENV: JSON.stringify('production')
+        }
       }),
+      new webpack.optimize.ModuleConcatenationPlugin(),
       new webpack.LoaderOptionsPlugin({
         minimize: true,
         debug: false
       }),
       new UglifyJSPlugin({
-        cache: true,
         parallel: {
-          cache: true,
           workers: os.cpus().length - 1
         },
         sourceMap: true,
@@ -33,9 +33,9 @@ module.exports = (env = {}) => {
           ecma: 8,
           compress: {
             warnings: true,
-            dead_code: false
+            dead_code: true
           },
-          mangle: false,
+          mangle: true,
           output: {
             comments: false,
             beautify: false
@@ -46,8 +46,10 @@ module.exports = (env = {}) => {
   } else {
     plugins = [
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': `"development"`
-      })
+        'process.env': {
+          NODE_ENV: JSON.stringify('development')
+        }
+      }),
     ]
   }
   return {
