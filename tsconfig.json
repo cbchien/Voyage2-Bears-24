@@ -4,7 +4,7 @@
   "compilerOptions": {
     /* Basic Options */
     "target": "es5",
-    "module": "esnext",
+    "module": "es6",
     "lib": [
       "dom",
       "es2015",
@@ -15,11 +15,10 @@
     "allowJs": true,
     "checkJs": true,
     "jsx": "react",
-    "diagnostics": false,
     "importHelpers": true,
     "sourceMap": true,
     "outDir": "./build/",
-    "rootDir": "./",
+    "rootDir": "./src/",
     "removeComments": true, 
     "downlevelIteration": true,
     "allowUnreachableCode": false,
@@ -27,23 +26,27 @@
     /* Strict Type-Checking Options */
     "strict": true,
     "noImplicitAny": false,
-    "strictNullChecks": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
+    "strictNullChecks": false,
+    "noImplicitThis": false,
+    "alwaysStrict": false,
+    "allowUnusedLabels": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "typings"
+    ],
 
     /* Additional Checks */
-    "noUnusedLocals": true,
+    "noStrictGenericChecks": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false,
 
     /* Module Resolution Options */
     "moduleResolution": "node",
-    "baseUrl": "./src/",
+    "baseUrl": ".",
     "paths": {
-      "*": [
-        "node_modules/*"
-      ]
+      "*": ["node_modules/*", "typings/*"]
     },
     "allowSyntheticDefaultImports": true,
     "listFiles": false,
@@ -53,16 +56,12 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": false
   },
-  "typeAcquisition": {
-    "enable": true
-  },
   "include": [
-    "./src/client/**/**.js"
+    "src/**/*"
   ],
   "exclude": [
-    "node_modules/**/**.js",
-    "build/**/**.js",
-    ".cache-loader/**/**.js",
-    "src/server/**/**.js"
+    "node_modules",
+    "build",
+    ".cache-loader"
   ]
 }
