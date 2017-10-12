@@ -70,6 +70,9 @@ module.exports = (env = {}) => {
     resolve: {
       extensions: ['.js']
     },
+    externals: {
+      'socket.io-client': 'io'
+    },
     module: {
       rules: [
         {
