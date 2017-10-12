@@ -3,6 +3,7 @@
 
 # own project ignored files:
 .cache-loader
+.credentials
 build/
 
 # Logs
