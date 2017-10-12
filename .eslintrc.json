@@ -4,12 +4,16 @@
   "env": {
     "node": true,
     "browser": true,
-    "commonjs": true
+    "commonjs": true,
+    "es6": true
   },
   "rules": {
     "strict": 1,
     "import/newline-after-import": "off",
+    "class-methods-use-this": "off",
     "react/jsx-filename-extension": "off",
+    "import/no-extraneous-dependencies": "off",
+    "no-param-reassign": "off",
     "func-style": [
       "error",
       "expression"
