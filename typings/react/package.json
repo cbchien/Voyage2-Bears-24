@@ -1,0 +1,96 @@
+{
+  "_from": "@types/react",
+  "_id": "@types/react@16.0.9",
+  "_inBundle": false,
+  "_integrity": "sha512-PoSZuMx2Ac6vHAfbeWWsFh4C2pKFUFATfOAojXoUsGfyRkMZh5w3kac3RkM965cIL+BGcickxqFxAHN5lVyWDg==",
+  "_location": "/@types/react",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@types/react",
+    "name": "@types/react",
+    "escapedName": "@types%2freact",
+    "scope": "@types",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@types/react/-/react-16.0.9.tgz",
+  "_shasum": "2ad952abbb22617620927694f9a4bce292d7fb2b",
+  "_spec": "@types/react",
+  "_where": "/Users/huangjx/Desktop/eddyw/chingu-dashboard",
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Asana",
+      "url": "https://asana.com"
+    },
+    {
+      "name": "AssureSign",
+      "url": "http://www.assuresign.com"
+    },
+    {
+      "name": "Microsoft",
+      "url": "https://microsoft.com"
+    },
+    {
+      "name": "John Reilly",
+      "url": "https://github.com/johnnyreilly"
+    },
+    {
+      "name": "Benoit Benezech",
+      "url": "https://github.com/bbenezech"
+    },
+    {
+      "name": "Patricio Zavolinsky",
+      "url": "https://github.com/pzavolinsky"
+    },
+    {
+      "name": "Digiguru",
+      "url": "https://github.com/digiguru"
+    },
+    {
+      "name": "Eric Anderson",
+      "url": "https://github.com/ericanderson"
+    },
+    {
+      "name": "Albert Kurniawan",
+      "url": "https://github.com/morcerf"
+    },
+    {
+      "name": "Tanguy Krotoff",
+      "url": "https://github.com/tkrotoff"
+    },
+    {
+      "name": "Dovydas Navickas",
+      "url": "https://github.com/DovydasNavickas"
+    },
+    {
+      "name": "Stéphane Goetz",
+      "url": "https://github.com/onigoetz"
+    },
+    {
+      "name": "Rich Seviora",
+      "url": "https://github.com/richseviora"
+    }
+  ],
+  "dependencies": {},
+  "deprecated": false,
+  "description": "TypeScript definitions for React",
+  "license": "MIT",
+  "main": "",
+  "name": "@types/react",
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+  },
+  "scripts": {},
+  "typeScriptVersion": "2.3",
+  "typesPublisherContentHash": "214216aa3fc2d038ebdbc90a516832335721cae8e95e1289d8a9a63f3d3534d1",
+  "version": "16.0.9"
+}
