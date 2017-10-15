@@ -186,6 +186,18 @@ class GoogleSheetsAPI {
       )))
     }))
   }
+  getSheetIdFromUrl(url) {
+    // Sample URL:
+    // https://docs.google.com/spreadsheets/d/12345abcde/edit#gid=0
+
+    const urlObj = new URL(url)
+
+    // In this example, urlObj.pathname would be "/spreadsheets/d/12345abcde/edit"
+
+    // We need to isolate the id (12345abcde)
+    const id = urlObj.pathname.split('/')[3]
+    return id
+  }
   commandLineSetup(finallyCb) {
     const rl = readline.createInterface({
       input: process.stdin,
