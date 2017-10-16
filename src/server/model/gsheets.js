@@ -4,6 +4,7 @@ const google = require('googleapis')
 const GoogleAuth = require('google-auth-library')
 const debugSetup = require('debug')('api:gsheets:setup')
 const readline = require('readline')
+const { URL } = require('url')
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 const TOKEN_DIR = path.join(__dirname, '../../../.credentials/')
@@ -186,6 +187,31 @@ class GoogleSheetsAPI {
       )))
     }))
   }
+  /**
+   * Links a Google Spreadsheet Document by its ID to the application.
+   * The sheetID is saved in the "linkedSheets" sheet in the Settings
+   * Document
+   * @param {string} name - Name of the Document
+   * @param {string} sheetID - The Google Spreadsheet ID to link
+   * @return {Promise} The result of calling appendRows
+   */
+  async linkSpreadsheet(name, sheetID) {
+    const allSheets = await this.getListOfSheets(this.settingsDocID)
+    const linkedSheets = allSheets.filter(
+      sheet => sheet.title === 'linkedSheets',
+    )[0]
+    if (typeof linkedSheets === 'undefined') {
+      throw new Error('"linkedSheets" does not exists in Settings doc')
+    }
+    return this.appendRows(this.settingsDocID, linkedSheets, [
+      [name, sheetID],
+    ])
+  }
+  /**
+   * Gets a Google Spreadsheet's ID from a URL
+   * @param {string} url - Google Spreadsheet URL
+   * @return {string} Google Spreadsheet's ID
+   */
   getSheetIdFromUrl(url) {
     // Sample URL:
     // https://docs.google.com/spreadsheets/d/12345abcde/edit#gid=0
