@@ -209,20 +209,30 @@ class GoogleSheetsAPI {
   }
   /**
    * Gets a Google Spreadsheet's ID from a URL
+   * 
+   * The URL should be in the following format:
+   * https://docs.google.com/spreadsheets/d/myIdGoesHere/...
+   * 
+   * It should start with 'docs.google.com/spreadsheets/d/'
+   * followed by the spreadsheet ID and other arguments.
+   * 
+   * The function is expected to throw an error for invalid URLs.
+   * 
    * @param {string} url - Google Spreadsheet URL
    * @return {string} Google Spreadsheet's ID
    */
   getSheetIdFromUrl(url) {
-    // Sample URL:
-    // https://docs.google.com/spreadsheets/d/12345abcde/edit#gid=0
-
     const urlObj = new URL(url)
+    if (urlObj.hostname != 'docs.google.com') {
+      throw Error("URL is not valid: " + url)
+    }
 
-    // In this example, urlObj.pathname would be "/spreadsheets/d/12345abcde/edit"
+    const pathnameArgs = urlObj.pathname.split('/')
+    if (pathnameArgs.length < 4 || pathnameArgs[3] === '') {
+      throw Error("URL is not complete: " + url)
+    }
 
-    // We need to isolate the id (12345abcde)
-    const id = urlObj.pathname.split('/')[3]
-    return id
+    return pathnameArgs[3]
   }
   commandLineSetup(finallyCb) {
     const rl = readline.createInterface({
