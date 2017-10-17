@@ -86,8 +86,14 @@ module.exports = (env = {}) => {
           exclude,
           loader: 'eslint-loader',
           options: {
-            cache: true,
-            eslintPath: path.resolve(__dirname, 'node_modules/eslint')
+            cache: false,
+            eslintPath: path.resolve(__dirname, 'node_modules/eslint'),
+            options: {
+              useEslintrc: true,
+              emitError: true,
+              emitWarning: true,
+              failOnError: true,
+            }
           }
         },
         {
