@@ -1,4 +1,5 @@
 const { middleware } = require('../config')
+const gsheets = require('../model/gsheets')
 const debug = require('debug')('api:namespace')
 const debugClient = require('debug')('api:namespace:client')
 const debugServer = require('debug')('api:namespace:server')
@@ -19,6 +20,25 @@ const isNotLogged = (socket, next) => {
   connectSession(socket, () => {
     if (!socket.request.session.logged) next()
   })
+}
+
+const isGoogleSheets = (options = { connected: true }) => (socket, next) => {
+  // If options.connected is true, it verifies if the clientSecret
+  // and token exists
+  // else if options.connected is false, it verifies if either of
+  // clientSecret or token do not exist
+  if (
+    gsheets.existClientSecret &&
+    gsheets.existToken &&
+    options.connected
+  ) {
+    next()
+  } else if (
+    !options.connected &&
+    (!gsheets.existClientSecret || !gsheets.existToken)
+  ) {
+    next()
+  }
 }
 
 class ServerNamespace {
@@ -99,5 +119,6 @@ module.exports = {
   connectSession,
   isLogged,
   isNotLogged,
+  isGoogleSheets,
   ServerNamespace,
 }
