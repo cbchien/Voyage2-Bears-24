@@ -223,15 +223,14 @@ class GoogleSheetsAPI {
    */
   getSheetIdFromUrl(url) {
     const urlObj = new URL(url)
-    if (urlObj.hostname != 'docs.google.com') {
-      throw Error("URL is not valid: " + url)
-    }
-
     const pathnameArgs = urlObj.pathname.split('/')
-    if (pathnameArgs.length < 4 || pathnameArgs[3] === '') {
-      throw Error("URL is not complete: " + url)
-    }
 
+    if (urlObj.hostname !== 'docs.google.com') {
+      throw Error(`URL is not valid: ${url}`)
+    }
+    if (pathnameArgs.length < 4 || pathnameArgs[3] === '') {
+      throw Error(`URL is not complete: ${url}`)
+    }
     return pathnameArgs[3]
   }
   commandLineSetup(finallyCb) {
