@@ -1,9 +1,12 @@
 import React from 'react'
-import Form from 'antd/es/form'
-import Icon from 'antd/es/icon'
-import Input from 'antd/es/input'
-import Button from 'antd/es/button'
-import Checkbox from 'antd/es/checkbox'
+import {
+  Button,
+  Checkbox,
+  ChinguLogoHeader,
+  Form,
+  Icon,
+  Input,
+} from '../../component'
 
 class LoginForm extends React.Component {
   constructor(...props) {
@@ -27,6 +30,9 @@ class LoginForm extends React.Component {
   render() {
     return (
       <Form onSubmit={this.handleSubmit} >
+        <Form.Item>
+          <ChinguLogoHeader />
+        </Form.Item>
         <Form.Item>
           <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} name="username" type="username" placeholder="Username" onChange={this.handleChange} value={this.state.username} />
         </Form.Item>
