@@ -8,5 +8,8 @@
   "editor.renderWhitespace": "boundary",
   "editor.wordWrap": "wordWrapColumn",
   "files.eol": "\n",
-  "editor.wordWrapColumn": 85
+  "editor.wordWrapColumn": 85,
+  "files.associations": {
+    "*.js": "javascriptreact"
+  }
 }
