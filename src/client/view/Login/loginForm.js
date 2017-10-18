@@ -40,8 +40,6 @@ class LoginForm extends React.Component {
           <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} name="password" type="password" placeholder="Password" onChange={this.handleChange} value={this.state.password} />
         </Form.Item>
         <Form.Item>
-          <Checkbox disabled>Remember me</Checkbox>
-          <span className="login-form-forgot" style={{ float: 'right' }}>Forgot password</span>
           <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }} >
             Log in
           </Button>
