@@ -7,7 +7,9 @@ import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction'
 
 import service from './service'
 import { mapServiceToStore, applyServices } from './service/utils'
+
 import Setup from './view/Setup'
+import Login from './view/Login'
 
 if (process.env.NODE_ENV === 'development') {
   localStorage.debug = 'app:*,api:*,test:*'
@@ -32,7 +34,10 @@ const store = createStore(combineReducers(
 render(
   <Provider store={store}>
     <Router>
-      <Route exact path="/setup" component={Setup} />
+      <section role="main">
+        <Route exact path="/setup" component={Setup} />
+        <Route exact path="/login" component={Login} />
+      </section>
     </Router>
   </Provider>,
   document.querySelector('[role="application"]'),
