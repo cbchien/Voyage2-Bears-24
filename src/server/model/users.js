@@ -42,11 +42,7 @@ class DashboardUsers {
   async getUsers() {
     // rows parameter input from gsheet getRows function
     const users = await this.parseUserRows()
-    let userArr = []
-    for (let row of users) {
-      userArr.push(row[0])
-    }
-    return userArr
+    return users.map(row => row[0])
   }
 }
 
