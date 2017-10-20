@@ -10,8 +10,7 @@ const LoginService = require('./login')
 io.path('/api')
 
 const namespace = {
-  main: io.of('/')
-    .use(isGoogleSheets()),
+  main: io.of('/'),
   login: io.of('/login')
     .use(isGoogleSheets())
     .use(isNotLogged),
