@@ -2,13 +2,6 @@ const debugUser = require('debug')('api:users')
 const gsheets = require('./gsheets')
 
 class DashboardUsers {
-  constructor() {
-    this.validated = null
-  }
-
-  initialize() {
-  }
-
   async parseUserRows() {
     const settingID = gsheets.settingsDocID
     const listOfSheets = await gsheets.getListOfSheets(settingID)
@@ -21,11 +14,12 @@ class DashboardUsers {
     // username and password will be from client side input
     const users = await this.parseUserRows()
     let matchCount = 0
-    for (let row of users) {
+    users.forEach((row) => {
       if (row[0] === username && row[1] === password) {
-        matchCount++
-      } 
-    }
+        /* eslint no-plusplus: "error" */
+        matchCount += 1
+      }
+    })
 
     // return true if only one entry is matched
     if (matchCount === 1) {
@@ -33,7 +27,7 @@ class DashboardUsers {
       debugUser('Matching profile found for:', username)
       return true
     } else if (matchCount > 1) {
-      debugUser('duplicate user entry in database')
+      debugUser('duplicate user entry in database for:', username)
       return false
     }
     return false
