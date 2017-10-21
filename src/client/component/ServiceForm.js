@@ -38,7 +38,6 @@ class ServiceForm extends React.Component {
     message
       ? <Alert
         style={{
-          marginTop: '20px',
           marginBottom: '20px',
         }}
         message={message}
