@@ -1,4 +1,5 @@
 // Antd Components
+export { default as Alert } from 'antd/es/alert'
 export { default as Avatar } from 'antd/es/avatar'
 export { default as Button } from 'antd/es/button'
 export { default as Card } from 'antd/es/card'
@@ -17,3 +18,4 @@ export { default as ChinguLogoHeader } from './ChinguLogoHeader'
 export { default as LoginBackground } from './LoginBackground'
 export { default as MainHeader } from './MainHeader'
 export { default as MainLayout } from './MainLayout'
+export { default as ServiceForm } from './ServiceForm'
