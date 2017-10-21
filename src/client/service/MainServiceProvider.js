@@ -4,8 +4,6 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Spin } from '../component'
 
-/* eslint-disable */
-
 class MainServiceProvider extends React.Component {
   static propTypes = {
     children: propTypes.node.isRequired,
@@ -34,7 +32,7 @@ class MainServiceProvider extends React.Component {
         : false
     )
     const currentPath = this.props.location.pathname
-    
+
     if (!connectedToServices) return
 
     if (shouldDisplaySetup.value && currentPath !== '/setup') {
@@ -52,19 +50,6 @@ class MainServiceProvider extends React.Component {
         this.props.history.push('/login')
       }
     }
-
-
-    // if (shouldDisplaySetup && currentPath !== '/setup') {
-    //   this.props.history.push('/setup')
-    // } else if (!shouldDisplaySetup && !isLogged) {
-    //   this.props.history.push('/login')
-    // } else if (
-    //   isLogged &&
-    //   (currentPath === '/setup' || currentPath === '/login')
-    // ) {
-    //   this.props.history.push('/')
-    // }
-    // console.log(this.props)
   }
   render() {
     const connectedToServices = this.props.connected.value
