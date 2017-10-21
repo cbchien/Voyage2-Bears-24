@@ -87,7 +87,7 @@ export class Service {
     })
     this.socket = socket
     socket.on('connect', () => {
-      debugClient('Connected to server! :)')
+      debugClient(`"${socket.nsp}" connected to server! :)`)
       // @ts-ignore
       if (typeof this.connection === 'function') {
         // @ts-ignore
