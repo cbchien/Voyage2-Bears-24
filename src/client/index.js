@@ -2,14 +2,18 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, combineReducers, compose } from 'redux'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction'
 
+// Services & utils
 import service from './service'
 import { mapServiceToStore, applyServices } from './service/utils'
 
+// Pages/Views
 import Setup from './view/Setup'
 import Login from './view/Login'
+
+const MainServiceProvider = service.MainServiceProvider
 
 if (process.env.NODE_ENV === 'development') {
   localStorage.debug = 'app:*,api:*,test:*'
@@ -34,10 +38,12 @@ const store = createStore(combineReducers(
 render(
   <Provider store={store}>
     <Router>
-      <section role="main">
-        <Route exact path="/setup" component={Setup} />
-        <Route exact path="/login" component={Login} />
-      </section>
+      <MainServiceProvider>
+        <Switch>
+          <Route exact path="/setup" component={Setup} />
+          <Route exact path="/login" component={Login} />
+        </Switch>
+      </MainServiceProvider>
     </Router>
   </Provider>,
   document.querySelector('[role="application"]'),
