@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 const store = createStore(combineReducers(
   mapServiceToStore({
     main: service.main,
+    setup: service.setup,
   }),
 ), compose(
   applyServices,
