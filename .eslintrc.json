@@ -13,6 +13,7 @@
     "class-methods-use-this": "off",
     "react/jsx-filename-extension": "off",
     "import/no-extraneous-dependencies": "off",
+    "react/forbid-prop-types": "off",
     "no-param-reassign": "off",
     "func-style": [
       "error",
