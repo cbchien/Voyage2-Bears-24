@@ -49,14 +49,15 @@ export class Service {
     const socket = this[privateProps.manager]
     const ownMethods = Reflect.ownKeys(Reflect.getPrototypeOf(this))
     const blacklist = [
-      'type',
-      'state',
       'askServer',
       'connect',
       'connection',
       'constructor',
       'emitServerEvent',
+      'hasRequiredFields',
       'socket',
+      'state',
+      'type',
     ]
     ownMethods.forEach((method) => {
       if (
@@ -70,18 +71,18 @@ export class Service {
         socket.on(`client/${method}`, (data, reply) => {
           debugServer(
             typeof reply === 'function'
-              ? `asking event "${method}" with data: "${data}"`
-              : `emitting client event "${method}" with data: "${data}"`,
+              ? `asking event "${method}" with data: "${JSON.stringify(data)}"`
+              : `emit client event "${method}" with data: "${JSON.stringify(data)}"`,
           )
-          const wrapReply = (replyData) => {
+          const wrapReply = (rdata) => {
             if (typeof reply !== 'function') {
               debugClient(
                 'WARNING: trying to reply but server is not expecting an answer',
               )
               return undefined
             }
-            debugClient(`event "${method}" replying with data "${replyData}"`)
-            return reply(replyData)
+            debugClient(`event "${method}" replying with "${JSON.stringify(rdata)}"`)
+            return reply(rdata)
           }
           this[method](data, wrapReply)
         })
@@ -128,27 +129,27 @@ export class Service {
 
   /**
    * Asks for data to a specific server event
-   * @param {String} eventName - Event on the server side where to send data
+   * @param {String} evt - Event on the server side where to send data
    * @param {*} data - Data to be sent to the server
    * @param {Function} callback - Acknowledge, will be called with the server answer
    */
-  askServer(eventName, data, callback) {
-    const wrapCallback = (repliedData) => {
-      debugServer(`replied for event "${eventName}" with data: "${repliedData}"`)
-      callback(repliedData)
+  askServer(evt, data, callback) {
+    const wrapCallback = (repData) => {
+      debugServer(`reply for "${evt}" with data: "${JSON.stringify(repData)}"`)
+      callback(repData)
     }
-    debugClient(`asking server for event "${eventName}" with data: "${data}"`)
-    this.socket.emit(`server/${eventName}`, data, wrapCallback)
+    debugClient(`ask server "${evt}" with data: "${JSON.stringify(data)}"`)
+    this.socket.emit(`server/${evt}`, data, wrapCallback)
   }
 
   /**
    * Emits an event on the server side and sends data
-   * @param {*} eventName - Event on the server side where to send data
+   * @param {*} evt - Event on the server side where to send data
    * @param {*} data - Data to be sent to the server
    */
-  emitServerEvent(eventName, data) {
-    debugClient(`emitting server event "${eventName}" with data: "${data}"`)
-    this.socket.emit(`server/${eventName}`, data)
+  emitServerEvent(evt, data) {
+    debugClient(`emit server event "${evt}" with data: "${JSON.stringify(data)}"`)
+    this.socket.emit(`server/${evt}`, data)
   }
 
   /**
@@ -161,6 +162,36 @@ export class Service {
       type: actionType,
       payload,
     })
+  }
+
+  /**
+   * Validate the properties of the given object and generate
+   * fieldErrors for properties that fail validation and
+   * a generalError when data is not an object
+   * @param {Object} data - Plain Object containing data
+   * @param {Array} expectedProps - Array containing the fields to validate
+   */
+  hasRequiredFields(data, expectedProps) {
+    const ret = {
+      hasError: false,
+      fieldErrors: {},
+      generalError: {},
+    }
+    if (typeof data !== 'object') {
+      ret.hasError = true
+      ret.generalError = {
+        message: 'Bad Request!, data is not an object',
+        type: 'error',
+      }
+      return ret
+    }
+    expectedProps.forEach((prop) => {
+      if (!Reflect.has(data, prop)) {
+        ret.fieldErrors[prop] = { validateStatus: 'error' }
+        ret.hasError = true
+      }
+    })
+    return ret
   }
 }
 
