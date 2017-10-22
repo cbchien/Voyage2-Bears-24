@@ -65,6 +65,8 @@ export class Service {
       ) {
         debugClient(`adding new event "${method}" for nsp "${socket.nsp}"`)
 
+        this[method] = this[method].bind(this)
+
         socket.on(`client/${method}`, (data, reply) => {
           debugServer(
             typeof reply === 'function'
