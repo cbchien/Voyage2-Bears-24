@@ -3,6 +3,7 @@ const gsheets = require('../model/gsheets')
 
 class Main extends ServerNamespace {
   async connection() {
+    gsheets.updateInfo()
     if (
       !gsheets.existClientSecret ||
       !gsheets.existToken
