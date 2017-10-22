@@ -111,7 +111,6 @@ class ServiceForm extends React.Component {
       } else if (!onInit) {
         rules[key].validateStatus = 'success'
         rules[key].hasFeedback = true
-        delete rules[key].help
       }
     })
     this.setState({ rules })
