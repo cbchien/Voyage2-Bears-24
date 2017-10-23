@@ -9,7 +9,7 @@ class Setup extends ServerNamespace {
    * @param {string} data.clientId - Client ID
    * @param {string} data.clientSecret - Client Secret
    * @param {string} data.redirectUri - Redirect URL
-   * @param {string} data.settingDocID - Google Sheets Settings Document
+   * @param {string} data.settingsDocId - Google Sheets Settings Document
    * @param {Function} reply - Callback function to reply the client's request
    */
   async setCredentials(data, reply) {
@@ -24,9 +24,9 @@ class Setup extends ServerNamespace {
           clientId,
           clientSecret,
           redirectUri,
-          settingDocID,
+          settingsDocId,
         } = data
-        gsheets.saveCredentials(clientId, clientSecret, redirectUri, settingDocID)
+        gsheets.saveCredentials(clientId, clientSecret, redirectUri, settingsDocId)
         reply({ status: 'OK!' })
       }
     } catch ({ message }) {
