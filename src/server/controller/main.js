@@ -12,8 +12,8 @@ class Main extends ServerNamespace {
       this.emitClientEvent('displaySetup', true)
     } else {
       if (
-        this.socket.session &&
-        this.socket.session.logged
+        this.socket.request.session &&
+        this.socket.request.session.logged
       ) {
         this.emitClientEvent('isLogged', true)
       } else {
