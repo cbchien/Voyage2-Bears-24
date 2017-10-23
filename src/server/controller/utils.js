@@ -33,6 +33,7 @@ const isGoogleSheets = (options = { connected: true }) => (socket, next) => {
     gsheets.existToken &&
     options.connected
   ) {
+    gsheets.initialize()
     next()
   } else if (
     !options.connected &&
@@ -116,7 +117,7 @@ class ServerNamespace {
     this.socket.emit(`client/${evt}`, data)
   }
 
-  hasRequiredFields(data, expectedProps) {
+  hasRequiredFields(data, expectedProps, addHelper = false) {
     const ret = {
       hasError: false,
       fieldErrors: {},
@@ -134,6 +135,9 @@ class ServerNamespace {
       if (!Reflect.has(data, prop) || data[prop] === '') {
         ret.fieldErrors[prop] = { validateStatus: 'error' }
         ret.hasError = true
+        if (addHelper) {
+          ret.fieldErrors[prop].help = `${prop} is required`
+        }
       }
     })
     return ret
