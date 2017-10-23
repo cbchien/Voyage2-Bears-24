@@ -1,39 +1,92 @@
 import React from 'react'
-import Form from 'antd/es/form'
-import Icon from 'antd/es/icon'
-import Input from 'antd/es/input'
-import Button from 'antd/es/button'
+import service from '../../service'
+import {
+  Button,
+  Icon,
+  Input,
+  ServiceForm,
+} from '../../component'
 
 class CredentialsForm extends React.Component {
   constructor(...props) {
     super(...props)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.onError = this.onError.bind(this)
+    this.onStateChange = this.onStateChange.bind(this)
+    this.rules = {
+      clientId: { label: 'Client ID', required: true },
+      clientSecret: { label: 'Client Secret', required: true },
+      redirectUri: { label: 'Redirect URI', required: true },
+      settingsDocId: { label: 'Settings Document ID', required: true },
+    }
+    this.state = {
+      error: {
+        message: null,
+        type: null,
+      },
+      loading: false,
+    }
   }
-  handleSubmit() {
+  onError(generalError) {
+    this.setState({
+      error: generalError,
+    })
+  }
+  onStateChange(state) {
+    this.setState({
+      loading: state === 'pending',
+    })
   }
   render() {
+    const loading = this.state.loading
+    const error = this.state.error
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Item
-          validateStatus="error"
-          help="Oh no!"
-          hasFeedback
-          required
+      <section>
+        <ServiceForm.Alert key="alert" message={error.message} type={error.type} />
+        <ServiceForm
+          key="serviceform"
+          onSubmit={service.setup.setCredentials}
+          rules={this.rules}
+          onError={this.onError}
+          onStateChange={this.onStateChange}
         >
-          <Input prefix={<Icon type="api" />} placeholder="Project ID" />
-        </Form.Item>
-        <Form.Item>
-          <Input prefix={<Icon type="idcard" />} placeholder="Client ID" />
-        </Form.Item>
-        <Form.Item>
-          <Input prefix={<Icon type="key" />} placeholder="Client Secret" />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" icon="upload">
+          <Input
+            name="clientId"
+            placeholder="[ID].apps.googleusercontent.com"
+            readOnly={loading}
+            autoComplete="off"
+            prefix={<Icon type="idcard" />}
+          />
+          <Input
+            name="clientSecret"
+            placeholder="[HASH]"
+            readOnly={loading}
+            autoComplete="off"
+            prefix={<Icon type="key" />}
+          />
+          <Input
+            name="redirectUri"
+            placeholder="urn:[resource]"
+            readOnly={loading}
+            autoComplete="off"
+            prefix={<Icon type="link" />}
+          />
+          <Input
+            name="settingsDocId"
+            placeholder="[Google Sheets 'Settings' Document ID]"
+            readOnly={loading}
+            autoComplete="off"
+            prefix={<Icon type="file-excel" />}
+          />
+          <Button
+            type="primary"
+            icon="upload"
+            htmlType="submit"
+            loading={this.state.loading}
+          >
             Submit
           </Button>
-        </Form.Item>
-      </Form>
+        </ServiceForm>
+      </section>
     )
   }
 }

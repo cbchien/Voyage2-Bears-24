@@ -1,0 +1,75 @@
+{
+  "_from": "@types/react-redux@5.0.10",
+  "_id": "@types/react-redux@5.0.10",
+  "_inBundle": false,
+  "_integrity": "sha512-fKFGa3bBNRF488tCaMwz/5yRA1IIlpb3RNC5ax4UBy2/+Xv0qZQ4YBhYhGTBwWPY2+VdqH8VF3xyaN1/Fv6Tkg==",
+  "_location": "/@types/react-redux",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "@types/react-redux@5.0.10",
+    "name": "@types/react-redux",
+    "escapedName": "@types%2freact-redux",
+    "scope": "@types",
+    "rawSpec": "5.0.10",
+    "saveSpec": null,
+    "fetchSpec": "5.0.10"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@types/react-redux/-/react-redux-5.0.10.tgz",
+  "_shasum": "f5c45a349f759d87d6b1f2aa096a756561a6d5c9",
+  "_spec": "@types/react-redux@5.0.10",
+  "_where": "/Users/huangjx/Desktop/eddyw/chingu-dashboard",
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Qubo",
+      "url": "https://github.com/tkqubo"
+    },
+    {
+      "name": "Thomas Hasner",
+      "url": "https://github.com/thasner"
+    },
+    {
+      "name": "Kenzie Togami",
+      "url": "https://github.com/kenzierocks"
+    },
+    {
+      "name": "Curits Layne",
+      "url": "https://github.com/clayne11"
+    },
+    {
+      "name": "Frank Tan",
+      "url": "https://github.com/tansongyang"
+    },
+    {
+      "name": "Nicholas Boll",
+      "url": "https://github.com/nicholasboll"
+    },
+    {
+      "name": "Dibyo Majumdar",
+      "url": "https://github.com/mdibyo"
+    }
+  ],
+  "dependencies": {
+    "@types/react": "*",
+    "redux": "^3.6.0"
+  },
+  "deprecated": false,
+  "description": "TypeScript definitions for react-redux",
+  "license": "MIT",
+  "main": "",
+  "name": "@types/react-redux",
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+  },
+  "scripts": {},
+  "typeScriptVersion": "2.4",
+  "typesPublisherContentHash": "f934306c9ee421f5746f2ce88c53f9fdca298f51773ac09990241512bac3d8c6",
+  "version": "5.0.10"
+}

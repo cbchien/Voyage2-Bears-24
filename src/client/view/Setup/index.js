@@ -1,70 +1,63 @@
 import React from 'react'
-import Layout from 'antd/es/layout'
-import Icon from 'antd/es/icon'
-import Steps from 'antd/es/steps'
-import Menu from 'antd/es/menu'
-import Avatar from 'antd/es/avatar'
-import CredentialsForm from './credentialsForm'
+import propTypes from 'prop-types'
+import { connect } from 'react-redux'
 import {
-  MainLayout,
-  MainHeader,
-  Row,
+  ChinguLogoHeader,
   Col,
-} from './../../component/index'
-const { Sider, Content } = Layout
-const { Step } = Steps
+  Layout,
+  LoginBackground,
+  MainLayout,
+  Row,
+  SwitchStep,
+} from './../../component'
 
-const UserItem = (
-  <Content style={{ display: 'flex', alignItems: 'center', height: '32px' }}>
-    <Avatar
-      size="small"
-      style={{ background: '#a31837', paddingLeft: '5px' }}
-      icon="user"
-    />
-    <span style={{ marginLeft: '5px' }}>
-      eddyw
-    </span>
-  </Content>
-)
+import SetupSteps from './SetupSteps'
+import CredentialsForm from './CredentialsForm'
+import AuthorizeForm from './AuthorizeForm'
+import DashboardReady from './DashboardReady'
 
-const Setup = () => (
-  <MainLayout>
-    <MainHeader>
-      <Menu.SubMenu title={UserItem}>
-        <Menu.Item key=":logout"><Icon type="logout" /> Logout</Menu.Item>
-      </Menu.SubMenu>
-    </MainHeader>
-    <Row type="flex" justify="center" align="top">
-      <Col xs={24} md={16} lg={12} xl={10}>
-        <Content style={{ padding: '0 50px' }}>
-          <Layout style={{ padding: '24px 0', background: '#fff' }}>
-            <Sider width={230} style={{ background: 'none', paddingLeft: '24px' }}>
-              <Steps direction="vertical" size="small" current={0}>
-                <Step
-                  title="Setup Credentials"
-                  description="Credentials for accessing Google Sheets API."
-                />
-                <Step
-                  title="Authorize"
-                  description="Create an OAuth2 Client with the given credentials."
-                />
-                <Step
-                  title="Provide Settings"
-                  description="Provide a Google Sheets URL for Settings."
-                />
-                <Step
-                  title="Ready!"
-                  description="Setup is complete."
-                />
-              </Steps>
-            </Sider>
-            <Content style={{ padding: '0 24px' }}>
-              <CredentialsForm />
+const { Content, Sider } = Layout
+
+class Setup extends React.PureComponent {
+  static propTypes = {
+    step: propTypes.number.isRequired,
+  }
+  render() {
+    return (
+      <MainLayout>
+        <LoginBackground />
+        <Row type="flex" justify="center" align="middle" style={{ height: '100vh' }}>
+          <Col xs={24} md={16} lg={12} xl={10}>
+            <Content style={{ padding: '0 50px' }}>
+              <Layout
+                style={{
+                  background: '#fff',
+                  paddingLeft: '20px',
+                  paddingTop: '20px',
+                }}
+              >
+                <ChinguLogoHeader key="logo" title="Dashboard Setup" />
+              </Layout>
+              <Layout style={{ padding: '24px 0', background: '#fff' }}>
+                <Sider width={230} style={{ background: 'none', paddingLeft: '24px' }}>
+                  <SetupSteps current={this.props.step} />
+                </Sider>
+                <Content style={{ padding: '0 24px' }}>
+                  <SwitchStep step={this.props.step}>
+                    <CredentialsForm />
+                    <AuthorizeForm />
+                    <DashboardReady />
+                  </SwitchStep>
+                </Content>
+              </Layout>
             </Content>
-          </Layout>
-        </Content>
-      </Col>
-    </Row>
-  </MainLayout>
-)
-export default Setup
+          </Col>
+        </Row>
+      </MainLayout>
+    )
+  }
+}
+
+export default connect(
+  state => ({ step: state.setup.step }),
+)(Setup)

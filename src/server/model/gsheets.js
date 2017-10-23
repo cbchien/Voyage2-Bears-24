@@ -20,11 +20,14 @@ class GoogleSheetsAPI {
         throw fsErr
       }
     }
-    this.existClientSecret = fs.existsSync(CLIENT_SECRET)
-    this.existToken = fs.existsSync(TOKEN_PATH)
+    this.updateInfo()
     this.settingsDocID = null
     // @ts-ignore
     this.sheets = google.sheets('v4')
+  }
+  updateInfo() {
+    this.existClientSecret = fs.existsSync(CLIENT_SECRET)
+    this.existToken = fs.existsSync(TOKEN_PATH)
   }
   initialize(withToken = true) {
     try {
@@ -73,13 +76,15 @@ class GoogleSheetsAPI {
     })
     return authUrl
   }
-  getNewToken(code, readyCb) {
-    this.oauth2Client.getToken(code, (codeErr, token) => {
-      if (codeErr) {
-        throw codeErr
-      }
-      fs.writeFileSync(TOKEN_PATH, JSON.stringify(token))
-      readyCb()
+  async getNewToken(code) {
+    return new Promise((next, fail) => {
+      this.oauth2Client.getToken(code, (codeErr, token) => {
+        if (codeErr) {
+          return fail(codeErr)
+        }
+        fs.writeFileSync(TOKEN_PATH, JSON.stringify(token))
+        return next()
+      })
     })
   }
   async getRows(spreadsheetId, sheet) {

@@ -6,6 +6,7 @@ const {
 } = require('./utils')
 const MainService = require('./main')
 const LoginService = require('./login')
+const SetupService = require('./setup')
 
 io.path('/api')
 
@@ -21,5 +22,6 @@ const namespace = {
 }
 namespace.main.on('connection', socket => new MainService(socket))
 namespace.login.on('connection', socket => new LoginService(socket))
+namespace.setup.on('connection', socket => new SetupService(socket))
 
 module.exports = io
