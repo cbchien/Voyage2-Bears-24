@@ -10,7 +10,7 @@ const config = {
   middleware: {
     session: session({
       secret: process.env.SECRET || 'chingu dashboard',
-      resave: false,
+      resave: true,
       saveUninitialized: true,
     }),
   },
