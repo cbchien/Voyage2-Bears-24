@@ -5,17 +5,13 @@ import {
   Icon,
   Layout,
   Avatar,
-} from '.'
+} from 'antd'
 const { Content } = Layout
 
 class UserMenu extends React.PureComponent {
   static propTypes = {
     username: propTypes.string.isRequired,
   }
-  static defaultProps = {
-    username: 'undefined',
-  }
-
   UserItem = () => (
     <Content style={{ display: 'flex', alignItems: 'center', height: '32px' }}>
       <Avatar

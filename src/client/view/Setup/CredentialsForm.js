@@ -1,11 +1,11 @@
 import React from 'react'
-import service from '../../service'
 import {
   Button,
   Icon,
   Input,
-  ServiceForm,
-} from '../../component'
+} from 'antd'
+import { ServiceForm } from '../../component'
+import service from '../../service'
 
 class CredentialsForm extends React.Component {
   constructor(...props) {
@@ -37,8 +37,7 @@ class CredentialsForm extends React.Component {
     })
   }
   render() {
-    const loading = this.state.loading
-    const error = this.state.error
+    const { loading, error } = this.state
     return (
       <section>
         <ServiceForm.Alert key="alert" message={error.message} type={error.type} />

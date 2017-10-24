@@ -2,7 +2,7 @@ import React from 'react'
 import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Spin } from '../component'
+import { Spin } from 'antd'
 
 class MainServiceProvider extends React.Component {
   static propTypes = {
@@ -22,12 +22,12 @@ class MainServiceProvider extends React.Component {
   }
   onServiceChange() {
     const shouldDisplaySetup = this.props.displaySetup
-    const isLogged = this.props.isLogged
+    const ifLogged = this.props.isLogged
     const connectedToServices = (
       this.props.connected
         ? (
           shouldDisplaySetup.status === 'resolved' &&
-          isLogged.status === 'resolved'
+          ifLogged.status === 'resolved'
         )
         : false
     )
@@ -39,12 +39,12 @@ class MainServiceProvider extends React.Component {
       this.props.history.push('/setup')
     } else if (!shouldDisplaySetup.value) {
       if (
-        isLogged.value &&
+        ifLogged.value &&
         (currentPath === '/setup' || currentPath === '/login')
       ) {
         this.props.history.push('/')
       } else if (
-        !isLogged.value &&
+        !ifLogged.value &&
         currentPath !== '/login'
       ) {
         this.props.history.push('/login')

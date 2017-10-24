@@ -1,9 +1,11 @@
 import React from 'react'
 import {
   Button,
-  ChinguLogoHeader,
   Icon,
   Input,
+} from 'antd'
+import {
+  ChinguLogoHeader,
   ServiceForm,
 } from '../../component'
 import service from '../../service'
@@ -67,7 +69,8 @@ class LoginForm extends React.Component {
             htmlType="submit"
             style={{ width: '100%' }}
             loading={this.state.loading}
-          >Log in</Button>
+          >Log in
+          </Button>
         </ServiceForm>
       </section>
     )

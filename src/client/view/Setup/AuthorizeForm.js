@@ -1,13 +1,12 @@
 import React from 'react'
 import propTypes from 'prop-types'
 import { connect } from 'react-redux'
-import service from '../../service'
 import {
   Input,
   Button,
-  // Icon,
-  ServiceForm,
-} from '../../component'
+} from 'antd'
+import { ServiceForm } from '../../component'
+import service from '../../service'
 
 class AuthorizeForm extends React.Component {
   static propTypes = {
@@ -53,8 +52,7 @@ class AuthorizeForm extends React.Component {
     })
   }
   render() {
-    const loading = this.state.loading
-    const error = this.state.error
+    const { loading, error } = this.state
     return (
       <section>
         <ServiceForm.Alert
