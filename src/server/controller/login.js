@@ -11,24 +11,27 @@ class Login extends ServerNamespace {
    * @param {Function} reply - callback to reply to user
    */
   async login(data, reply) {
+    const validate = this.hasRequiredFields(data, ['username', 'password'], true)
+    if (validate.hasError) {
+      return reply(validate)
+    }
     try {
       const { username, password } = data
-      const { request } = this.socket.request
+      const { session } = this.socket.request
       await users.matchLogin(username, password)
-      request.session = {
-        logged: true,
-        username,
-      }
-      reply({
-        message: 'Login successfull',
-      })
+      session.logged = true
+      session.username = username
+      session.save()
+      reply({ status: 'OK' })
       debugLogin('User logged in successfully')
     } catch (error) {
       reply({
-        error: error.message,
+        hasError: true,
+        generalError: { message: error.message, type: 'error' },
       })
       debugLogin(error.message)
     }
+    return true
   }
 }
 

@@ -38,14 +38,12 @@ class ServiceForm extends React.Component {
     onError: () => { },
     onStateChange: () => { },
   }
-  static Alert = ({ message, type }) => (
+  static Alert = ({ message, type, style = {} }) => (
     message
       ? <Alert
-        style={{
-          marginBottom: '20px',
-        }}
         message={message}
         type={type}
+        style={style}
         showIcon
       />
       : null

@@ -3,6 +3,7 @@ const {
   isLogged,
   isNotLogged,
   isGoogleSheets,
+  connectSession,
 } = require('./utils')
 const MainService = require('./main')
 const LoginService = require('./login')
@@ -11,7 +12,8 @@ const SetupService = require('./setup')
 io.path('/api')
 
 const namespace = {
-  main: io.of('/'),
+  main: io.of('/')
+    .use(connectSession),
   login: io.of('/login')
     .use(isGoogleSheets())
     .use(isNotLogged),

@@ -36,7 +36,7 @@ class DashboardUsers {
       }
       return true
     }
-    throw new Error(`No matching profile was found for ${username}`)
+    throw new Error('Invalid credentials')
   }
   /**
    * Gets the list of usernames from `users` sheet
