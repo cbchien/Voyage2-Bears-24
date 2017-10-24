@@ -6,7 +6,6 @@ import {
   MainLayout,
   Row,
   LoginBackground,
-  Sidebar,
 } from './../../component/index'
 const { Content } = Layout
 
@@ -24,7 +23,6 @@ const Login = () => (
         </Content>
       </Col>
     </Row>
-    <Sidebar />
   </MainLayout>
 )
 export default Login
