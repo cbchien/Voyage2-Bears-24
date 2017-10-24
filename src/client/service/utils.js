@@ -212,7 +212,8 @@ export const applyServices = createStore => (reducer, preloadedState, enhancer) 
     preloadedState,
     enhancer,
   )
-  dispatch = store.dispatch
+  const orgDispatch = store.dispatch
+  dispatch = orgDispatch
   return store
 }
 
