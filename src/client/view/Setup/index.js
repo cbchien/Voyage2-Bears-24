@@ -2,12 +2,14 @@ import React from 'react'
 import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {
-  ChinguLogoHeader,
   Col,
   Layout,
+  Row,
+} from 'antd'
+import {
+  ChinguLogoHeader,
   LoginBackground,
   MainLayout,
-  Row,
   SwitchStep,
 } from './../../component'
 

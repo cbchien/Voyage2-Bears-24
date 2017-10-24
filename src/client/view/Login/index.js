@@ -1,12 +1,15 @@
 import React from 'react'
-import LoginForm from './loginForm'
 import {
   Col,
   Layout,
-  MainLayout,
   Row,
+} from 'antd'
+import {
+  MainLayout,
   LoginBackground,
 } from './../../component/index'
+import LoginForm from './loginForm'
+
 const { Content } = Layout
 
 const Login = () => (
