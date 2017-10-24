@@ -2,48 +2,74 @@ import React from 'react'
 import {
   Button,
   ChinguLogoHeader,
-  Form,
   Icon,
   Input,
+  ServiceForm,
 } from '../../component'
+import service from '../../service'
 
 class LoginForm extends React.Component {
-  constructor(...props) {
-    super(...props)
+  constructor(...rest) {
+    super(...rest)
     this.state = {
-      username: '',
-      password: '',
+      loading: false,
+      error: {
+        message: null,
+        type: null,
+      },
     }
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleChange = this.handleChange.bind(this)
+    this.onStateChange = this.onStateChange.bind(this)
+    this.onError = this.onError.bind(this)
   }
-  handleChange(e) {
-    const change = {}
-    change[e.target.name] = e.target.value
-    this.setState(change)
+  onStateChange(state) {
+    this.setState({
+      loading: state === 'pending',
+    })
   }
-  handleSubmit(e) {
-    e.preventDefault()
-    // TODO: handle submit
+  onError(generalError) {
+    this.setState({
+      error: generalError,
+    })
   }
   render() {
     return (
-      <Form onSubmit={this.handleSubmit} >
-        <Form.Item>
+      <section role="form">
+        <ServiceForm
+          onSubmit={service.login.attemptLogin}
+          onStateChange={this.onStateChange}
+          onError={this.onError}
+          itemLayout={null}
+          submitLayout={null}
+        >
           <ChinguLogoHeader />
-        </Form.Item>
-        <Form.Item>
-          <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} name="username" type="username" placeholder="Username" onChange={this.handleChange} value={this.state.username} />
-        </Form.Item>
-        <Form.Item>
-          <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} name="password" type="password" placeholder="Password" onChange={this.handleChange} value={this.state.password} />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }} >
-            Log in
-          </Button>
-        </Form.Item>
-      </Form>
+          <ServiceForm.Alert
+            message={this.state.error.message}
+            type={this.state.error.type}
+          />
+          <Input
+            name="username"
+            type="username"
+            placeholder="Username"
+            autoComplete="off"
+            readOnly={this.state.loading}
+            prefix={<Icon type="user" />}
+          />
+          <Input
+            name="password"
+            type="password"
+            placeholder="Password"
+            autoComplete="off"
+            readOnly={this.state.loading}
+            prefix={<Icon type="lock" />}
+          />
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ width: '100%' }}
+            loading={this.state.loading}
+          >Log in</Button>
+        </ServiceForm>
+      </section>
     )
   }
 }

@@ -57,7 +57,12 @@ class AuthorizeForm extends React.Component {
     const error = this.state.error
     return (
       <section>
-        <ServiceForm.Alert key="alert" message={error.message} type={error.type} />
+        <ServiceForm.Alert
+          key="alert"
+          message={error.message}
+          type={error.type}
+          style={{ marginBottom: '20px' }}
+        />
         <ServiceForm
           onInit={service.setup.getAuthUrl}
           onSubmit={service.setup.authorize}
