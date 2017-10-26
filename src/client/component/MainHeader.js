@@ -3,7 +3,6 @@ import propTypes from 'prop-types'
 import {
   Col,
   Layout,
-  Menu,
   Row,
 } from 'antd'
 import {
@@ -34,19 +33,7 @@ class MainHeader extends React.PureComponent {
             />
           </Col>
           <Col span={14} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Menu
-              mode="horizontal"
-              defaultSelectedKeys={['2']}
-              selectable={false}
-              style={{
-                background: 'none',
-                lineHeight: '32px',
-                border: 0,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >{this.props.children}
-            </Menu>
+            {this.props.children}
           </Col>
         </Row>
       </Header>
