@@ -1,4 +1,6 @@
-const bind = function bindMethod(target, method, descriptor) {
+import service from '../service'
+
+export const bind = function bindMethod(target, method, descriptor) {
   const func = descriptor.value
   let isBound = false
   delete descriptor.value
@@ -23,4 +25,13 @@ const bind = function bindMethod(target, method, descriptor) {
   }
 }
 
-export default bind
+export const registerPath = ({ path, title, icon = '' }) => (constructor) => {
+  service.main.socket.on('connect', () => {
+    service.main.addToSidebar({
+      path,
+      title,
+      icon,
+    })
+  })
+  return constructor
+}

@@ -8,4 +8,4 @@ export { default as Sidebar } from './Sidebar'
 export { default as SwitchStep } from './SwitchStep'
 export { default as UserMenu } from './UserMenu'
 // decorators
-export { default as bind } from './decorators'
+export { bind, registerPath } from './decorators'
