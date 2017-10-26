@@ -10,8 +10,8 @@ class Setup extends Service {
     authUrl: null,
   }
   type = {
-    SET_STEP: Symbol('SET_STEP'),
-    SET_AUTH_URL: Symbol('SET_AUTH_URL'),
+    SET_STEP: Symbol('Setup::Set step to display'),
+    SET_AUTH_URL: Symbol('Setup::Set AuthURL'),
   }
   setCredentials(form) {
     const {
