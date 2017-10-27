@@ -1,14 +1,11 @@
 import React from 'react'
 import propTypes from 'prop-types'
-import { Steps } from './../../component/index'
+import { Steps } from 'antd'
 const { Step } = Steps
 
 class SetupSteps extends React.PureComponent {
   static propTypes = {
     current: propTypes.number.isRequired,
-  }
-  static defaultProps = {
-    current: 0,
   }
   render() {
     return (

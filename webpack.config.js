@@ -5,6 +5,7 @@ const path = require('path')
 const os = require('os')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const tsImportPluginFactory = require('ts-import-plugin')
 
 let plugins = []
 let test = /\.js?$/
@@ -25,9 +26,8 @@ module.exports = (env = {}) => {
         debug: false
       }),
       new UglifyJSPlugin({
-        parallel: {
-          workers: os.cpus().length - 1
-        },
+        cache: true,
+        parallel: os.cpus().length - 1,
         sourceMap: true,
         uglifyOptions: {
           ecma: 8,
@@ -101,8 +101,16 @@ module.exports = (env = {}) => {
           exclude,
           loader: 'ts-loader',
           options: {
-            entryFileIsJs: true,
-            happyPackMode: true
+            happyPackMode: true,
+            getCustomTransformers: () => ({
+              before: [tsImportPluginFactory([
+                {
+                  libraryName: 'antd',
+                  libraryDirectory: 'es',
+                  style: false,
+                }
+              ])]
+            })
           }
         },
         {

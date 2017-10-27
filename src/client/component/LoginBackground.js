@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout } from './index'
+import { Layout } from 'antd'
 
 const LoginBackground = () => (
   <Layout

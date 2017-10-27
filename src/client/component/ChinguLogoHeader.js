@@ -23,7 +23,8 @@ class ChinguLogoHeader extends React.PureComponent {
             marginLeft: '5px',
             color: this.props.color,
           }}
-        >{this.props.title}</span>
+        >{this.props.title}
+        </span>
       </h2>
     )
   }

@@ -1,6 +1,6 @@
 import React from 'react'
 import propTypes from 'prop-types'
-import { Layout } from './index'
+import { Layout } from 'antd'
 
 class MainLayout extends React.PureComponent {
   static propTypes = {

@@ -3,7 +3,7 @@ import propTypes from 'prop-types'
 import {
   Form,
   Alert,
-} from './'
+} from 'antd'
 
 class ServiceForm extends React.Component {
   static propTypes = {
@@ -116,7 +116,7 @@ class ServiceForm extends React.Component {
   mapChildren() {
     const children = React.Children.map(this.props.children,
       (InputComponent) => {
-        const name = InputComponent.props.name
+        const { name } = InputComponent.props
         if (typeof name !== 'undefined') {
           this.data[name] = null
           this.keys.push(name)

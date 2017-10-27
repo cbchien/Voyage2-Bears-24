@@ -1,13 +1,15 @@
 import React from 'react'
-import LoginForm from './loginForm'
 import {
   Col,
   Layout,
-  MainLayout,
   Row,
+} from 'antd'
+import {
+  MainLayout,
   LoginBackground,
-  Sidebar,
 } from './../../component/index'
+import LoginForm from './loginForm'
+
 const { Content } = Layout
 
 const Login = () => (
@@ -24,7 +26,6 @@ const Login = () => (
         </Content>
       </Col>
     </Row>
-    <Sidebar />
   </MainLayout>
 )
 export default Login

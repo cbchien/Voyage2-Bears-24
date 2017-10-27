@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from '../../component'
+import { Button } from 'antd'
 
 class DashboardReady extends React.PureComponent {
   constructor(...rest) {
@@ -25,7 +25,8 @@ class DashboardReady extends React.PureComponent {
         onClick={this.onClick}
         type="dashed"
         disabled={this.state.disabled}
-      >{this.state.message}</Button>
+      >{this.state.message}
+      </Button>
     )
   }
 }
