@@ -5,7 +5,7 @@ class Setup extends ServerNamespace {
   /**
    * Generate the client_secret.json file containing details to
    * connect to and use Google Sheets API
-   * @param {Object} data 
+   * @param {Object} data
    * @param {string} data.clientId - Client ID
    * @param {string} data.clientSecret - Client Secret
    * @param {string} data.redirectUri - Redirect URL
@@ -60,7 +60,8 @@ class Setup extends ServerNamespace {
         reply({ status: 'OK!' })
       }
     } catch (error) {
-      reply({ hasError: true,
+      reply({
+        hasError: true,
         fieldErrors: {
           code: { validateStatus: 'error' },
         },

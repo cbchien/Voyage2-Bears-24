@@ -214,15 +214,15 @@ class GoogleSheetsAPI {
   }
   /**
    * Gets a Google Spreadsheet's ID from a URL
-   * 
+   *
    * The URL should be in the following format:
    * https://docs.google.com/spreadsheets/d/myIdGoesHere/...
-   * 
+   *
    * It should start with 'docs.google.com/spreadsheets/d/'
    * followed by the spreadsheet ID and other arguments.
-   * 
+   *
    * The function is expected to throw an error for invalid URLs.
-   * 
+   *
    * @param {string} url - Google Spreadsheet URL
    * @return {string} Google Spreadsheet's ID
    */
@@ -238,27 +238,27 @@ class GoogleSheetsAPI {
     }
     return pathnameArgs[3]
   }
-  commandLineSetup(finallyCb) {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    })
-    if (!this.existToken) {
-      this.initialize(false)
-      debugSetup('Authorize by visiting URL:', this.generateAuthUrl())
-      rl.question('Enter code here:', (code) => {
-        rl.close()
-        this.getNewToken(code, () => {
-          this.initialize()
-          debugSetup('Restart the server!')
-        })
-      })
-    } else {
-      this.initialize()
-      debugSetup('GoogleSheets API was initialized. :)')
-      finallyCb()
-    }
-  }
+  // commandLineSetup(finallyCb) {
+  //   const rl = readline.createInterface({
+  //     input: process.stdin,
+  //     output: process.stdout,
+  //   })
+  //   if (!this.existToken) {
+  //     this.initialize(false)
+  //     debugSetup('Authorize by visiting URL:', this.generateAuthUrl())
+  //     rl.question('Enter code here:', (code) => {
+  //       rl.close()
+  //       this.getNewToken(code, () => {
+  //         this.initialize()
+  //         debugSetup('Restart the server!')
+  //       })
+  //     })
+  //   } else {
+  //     this.initialize()
+  //     debugSetup('GoogleSheets API was initialized. :)')
+  //     finallyCb()
+  //   }
+  // }
 }
 
 module.exports = new GoogleSheetsAPI()
