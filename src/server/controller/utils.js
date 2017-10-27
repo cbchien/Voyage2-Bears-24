@@ -1,5 +1,6 @@
 const { middleware } = require('../config')
 const gsheets = require('../model/gsheets')
+const colors = require('colors/safe')
 const debug = require('debug')('api:namespace')
 const debugClient = require('debug')('api:namespace:client')
 const debugServer = require('debug')('api:namespace:server')
@@ -43,13 +44,16 @@ const isGoogleSheets = (options = { connected: true }) => (socket, next) => {
   }
 }
 
+const { inverse } = colors
+
 class ServerNamespace {
   constructor(socket) {
     const ownMethods = Reflect.ownKeys(
       Reflect.getPrototypeOf(this),
     )
     debug(
-      `new namespace created "${socket.nsp.name}" for clientID "${socket.id}"`,
+      `new namespace created ${inverse(socket.nsp.name)}`,
+      ` for clientID ${inverse(socket.id)}`,
     )
     const blacklist = [
       'askClient',
@@ -65,21 +69,29 @@ class ServerNamespace {
         typeof this[method] === 'function' &&
         !(method in blacklist)
       ) {
-        debug(`adding new event "${method}" for nsp "${socket.nsp.name}"`)
+        debug(
+          `adding new event ${inverse(String(method))}`,
+          ` for nsp ${inverse(socket.nsp.name)}`,
+        )
 
         socket.on(`server/${method}`, (data, reply) => {
           debugClient(
             typeof reply === 'function'
-              ? `asking event "${method}" with data: "${JSON.stringify(data)}"`
-              : `emit server event "${method}" with data: "${JSON.stringify(data)}"`,
+              ? `asking event ${inverse(String(method))} ` +
+                `with data: ${inverse(JSON.stringify(data))}`
+              : `emit server event ${inverse(String(method))} ` +
+                `with data: ${inverse(JSON.stringify(data))}`,
           )
           const wrapReply = (rData) => {
             if (typeof reply !== 'function') {
-              return debugServer(
+              return debugServer(colors.yellow(
                 'WARNING: trying to reply but client is not expecting an answer',
-              )
+              ))
             }
-            debugServer(`event "${method}" replying with "${JSON.stringify(rData)}"`)
+            debugServer(
+              `event ${inverse(String(method))} replying with ` +
+              `${inverse(JSON.stringify(rData))}`,
+            )
             return reply(rData)
           }
           this[method](data, wrapReply)
@@ -101,10 +113,16 @@ class ServerNamespace {
    */
   askClient(evt, data, callback) {
     const wrapCallback = (repData) => {
-      debugClient(`reply for "${evt}" with data: "${JSON.stringify(repData)}"`)
+      debugClient(
+        `replying for ${inverse(evt)} with data: ` +
+        `${inverse(JSON.stringify(repData))}`,
+      )
       callback(repData)
     }
-    debugServer(`ask client "${evt}" with data: "${JSON.stringify(data)}"`)
+    debugServer(
+      `ask client ${inverse(evt)} with data: ` +
+      `${inverse(JSON.stringify(data))}`,
+    )
     this.socket.emit(`client/${evt}`, data, wrapCallback)
   }
   /**
@@ -113,7 +131,10 @@ class ServerNamespace {
    * @param {*} data - Data to be sent to the client
    */
   emitClientEvent(evt, data) {
-    debugServer(`emit client event "${evt}" with data: "${JSON.stringify(data)}"`)
+    debugServer(
+      `emit client event ${inverse(evt)} with data: ` +
+      `${inverse(JSON.stringify(data))}`,
+    )
     this.socket.emit(`client/${evt}`, data)
   }
 

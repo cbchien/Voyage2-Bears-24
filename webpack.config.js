@@ -93,6 +93,7 @@ module.exports = (env = {}) => {
               emitError: true,
               emitWarning: true,
               failOnError: true,
+              failOnWarning: true,
             }
           }
         },
