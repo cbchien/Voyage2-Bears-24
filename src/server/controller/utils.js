@@ -1,3 +1,4 @@
+const util = require('util')
 const { middleware } = require('../config')
 const gsheets = require('../model/gsheets')
 const colors = require('colors/safe')
@@ -44,7 +45,15 @@ const isGoogleSheets = (options = { connected: true }) => (socket, next) => {
   }
 }
 
-const { inverse } = colors
+const { white, bold, inverse } = colors
+
+const emp = str => util.inspect(str, { colors: true })
+const formatCode = code => (
+  util.inspect(code, { colors: true, breakLength: 0 })
+    .split('\n')
+    .map((line, n) => `${inverse(String(n).padStart(3))} ${bold(white(line))}`)
+    .join('\n')
+)
 
 class ServerNamespace {
   constructor(socket) {
@@ -52,8 +61,8 @@ class ServerNamespace {
       Reflect.getPrototypeOf(this),
     )
     debug(
-      `new namespace created ${inverse(socket.nsp.name)}`,
-      ` for clientID ${inverse(socket.id)}`,
+      `new namespace created ${emp(socket.nsp.name)}`,
+      ` for clientID ${emp(socket.id)}`,
     )
     const blacklist = [
       'askClient',
@@ -70,29 +79,28 @@ class ServerNamespace {
         !(method in blacklist)
       ) {
         debug(
-          `adding new event ${inverse(String(method))}`,
-          ` for nsp ${inverse(socket.nsp.name)}`,
+          `adding new event ${emp(String(method))}`,
+          ` for nsp ${emp(socket.nsp.name)}`,
         )
 
         socket.on(`server/${method}`, (data, reply) => {
-          debugClient(
+          debugClient(`${(
             typeof reply === 'function'
-              ? `asking event ${inverse(String(method))} ` +
-                `with data: ${inverse(JSON.stringify(data))}`
-              : `emit server event ${inverse(String(method))} ` +
-                `with data: ${inverse(JSON.stringify(data))}`,
-          )
-          const wrapReply = (rData) => {
+              ? `asking event ${emp(String(method))} `
+              : `emit server event ${emp(String(method))} `
+          )}with data: \n${formatCode(data)}`)
+
+          const wrapReply = (replayingData) => {
             if (typeof reply !== 'function') {
               return debugServer(colors.yellow(
                 'WARNING: trying to reply but client is not expecting an answer',
               ))
             }
             debugServer(
-              `event ${inverse(String(method))} replying with ` +
-              `${inverse(JSON.stringify(rData))}`,
+              `event ${emp(String(method))} replying with data:` +
+              `\n${formatCode(replayingData)}`,
             )
-            return reply(rData)
+            return reply(replayingData)
           }
           this[method](data, wrapReply)
         })
@@ -107,35 +115,35 @@ class ServerNamespace {
   }
   /**
    * Asks for data to a specific client event
-   * @param {String} evt - Event on the client side where to send data
+   * @param {String} event - Event on the client side where to send data
    * @param {*} data - Data to be sent to the client
    * @param {Function} callback - Acknowledge, will be called with the clients answer
    */
-  askClient(evt, data, callback) {
-    const wrapCallback = (repData) => {
+  askClient(event, data, callback) {
+    const wrapCallback = (clientRepliedData) => {
       debugClient(
-        `replying for ${inverse(evt)} with data: ` +
-        `${inverse(JSON.stringify(repData))}`,
+        `replying for ${emp(event)} with data: ` +
+        `\n${formatCode(clientRepliedData)}`,
       )
-      callback(repData)
+      callback(clientRepliedData)
     }
     debugServer(
-      `ask client ${inverse(evt)} with data: ` +
-      `${inverse(JSON.stringify(data))}`,
+      `asking client event ${emp(event)} with data: ` +
+      `\n${formatCode(data)}`,
     )
-    this.socket.emit(`client/${evt}`, data, wrapCallback)
+    this.socket.emit(`client/${event}`, data, wrapCallback)
   }
   /**
    * Emits an event on the client side and sends data
-   * @param {*} evt - Event on the client side where to send data
+   * @param {*} event - Event on the client side where to send data
    * @param {*} data - Data to be sent to the client
    */
-  emitClientEvent(evt, data) {
+  emitClientEvent(event, data) {
     debugServer(
-      `emit client event ${inverse(evt)} with data: ` +
-      `${inverse(JSON.stringify(data))}`,
+      `emit client event ${emp(event)} with data: ` +
+      `\n${formatCode(data)}`,
     )
-    this.socket.emit(`client/${evt}`, data)
+    this.socket.emit(`client/${event}`, data)
   }
 
   hasRequiredFields(data, expectedProps, addHelper = false) {

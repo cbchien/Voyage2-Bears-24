@@ -22,6 +22,14 @@ const privateProps = {
 
 let dispatch = null
 
+const emp = str => `"${str}"`
+const formatCode = code => (
+  `\n${JSON.stringify(code, null, 2)
+    .split('\n')
+    .map((line, n) => `${String(n).padStart(3)}: ${line}`)
+    .join('\n')}`
+)
+
 export const pending = (value = null) => ({
   status: 'pending',
   value,
@@ -59,20 +67,27 @@ export class Service {
       'state',
       'type',
     ]
+    if (process.env.NODE_ENV === 'development') {
+      if (!console.groupCollapsed) { // eslint-disable-line
+        console.groupCollapsed(`Constructor(Service/${new.target.name})`) // eslint-disable-line
+      } else {
+        console.groupCollapsed(`Constructor(Service/${new.target.name})`) // eslint-disable-line
+      }
+    }
     ownMethods.forEach((method) => {
       if (
         typeof this[method] === 'function' &&
         !(method in blacklist)
       ) {
-        debugClient(`adding new event "${method}" for nsp "${socket.nsp}"`)
+        debugClient(`adding new event ${emp(method)} for nsp "${socket.nsp}"`)
 
         this[method] = this[method].bind(this)
 
         socket.on(`client/${method}`, (data, reply) => {
           debugServer(
             typeof reply === 'function'
-              ? `asking event "${method}" with data: "${JSON.stringify(data)}"`
-              : `emit client event "${method}" with data: "${JSON.stringify(data)}"`,
+              ? `asking event ${emp(method)} with data: ${formatCode(data)}`
+              : `emit client event ${emp(method)} with data: ${formatCode(data)}`,
           )
           const wrapReply = (rdata) => {
             if (typeof reply !== 'function') {
@@ -81,7 +96,7 @@ export class Service {
               )
               return undefined
             }
-            debugClient(`event "${method}" replying with "${JSON.stringify(rdata)}"`)
+            debugClient(`event ${emp(method)} replying with "${JSON.stringify(rdata)}"`)
             return reply(rdata)
           }
           this[method](data, wrapReply)
@@ -100,6 +115,9 @@ export class Service {
     debugClient(
       `new client Socket created for namespace ${socket.nsp}`,
     )
+    if (process.env.NODE_ENV === 'development') {
+      console.groupEnd() // eslint-disable-line
+    }
   }
   [privateProps.reducer](state = this.state, action) {
     if (!this[privateProps.types]) {
@@ -135,10 +153,10 @@ export class Service {
    */
   askServer(evt, data, callback) {
     const wrapCallback = (repData) => {
-      debugServer(`reply for "${evt}" with data: "${JSON.stringify(repData)}"`)
+      debugServer(`replying for "${evt}" with data: ${formatCode(repData)}`)
       callback(repData)
     }
-    debugClient(`ask server "${evt}" with data: "${JSON.stringify(data)}"`)
+    debugClient(`asking server "${evt}" with data: ${formatCode(data)}`)
     this.socket.emit(`server/${evt}`, data, wrapCallback)
   }
 
@@ -148,7 +166,7 @@ export class Service {
    * @param {*} data - Data to be sent to the server
    */
   emitServerEvent(evt, data) {
-    debugClient(`emit server event "${evt}" with data: "${JSON.stringify(data)}"`)
+    debugClient(`emit server event "${evt}" with data: ${formatCode(data)}`)
     this.socket.emit(`server/${evt}`, data)
   }
 
