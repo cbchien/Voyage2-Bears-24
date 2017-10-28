@@ -2,7 +2,7 @@ import React from 'react'
 import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Spin } from 'antd'
+import { LoadingContent } from '../../component'
 
 class MainServiceProvider extends React.Component {
   static propTypes = {
@@ -58,7 +58,7 @@ class MainServiceProvider extends React.Component {
         {
           connectedToServices
             ? this.props.children
-            : <Spin size="large" />
+            : <LoadingContent />
         }
       </section>
     )
