@@ -2,63 +2,77 @@ import React from 'react'
 import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Spin } from 'antd'
+import { LoadingContent } from '../../component'
 
 class MainServiceProvider extends React.Component {
   static propTypes = {
     children: propTypes.node.isRequired,
-    history: propTypes.object.isRequired,
-    location: propTypes.object.isRequired,
-    connected: propTypes.object.isRequired,
-    isLogged: propTypes.object.isRequired,
-    displaySetup: propTypes.object.isRequired,
+    history: propTypes.object.isRequired, // eslint-disable-line
+    location: propTypes.object.isRequired, // eslint-disable-line
+    connected: propTypes.object.isRequired, // eslint-disable-line
+    isLogged: propTypes.object.isRequired, // eslint-disable-line
+    displaySetup: propTypes.object.isRequired, // eslint-disable-line
   }
-  constructor(...rest) {
-    super(...rest)
-    this.onServiceChange()
-  }
-  componentDidUpdate() {
-    this.onServiceChange()
-  }
-  onServiceChange() {
-    const shouldDisplaySetup = this.props.displaySetup
-    const ifLogged = this.props.isLogged
-    const connectedToServices = (
-      this.props.connected
-        ? (
-          shouldDisplaySetup.status === 'resolved' &&
-          ifLogged.status === 'resolved'
-        )
-        : false
-    )
-    const currentPath = this.props.location.pathname
-
-    if (!connectedToServices) return
-
-    if (shouldDisplaySetup.value && currentPath !== '/setup') {
-      this.props.history.push('/setup')
-    } else if (!shouldDisplaySetup.value) {
-      if (
-        ifLogged.value &&
-        (currentPath === '/setup' || currentPath === '/login')
-      ) {
-        this.props.history.push('/')
-      } else if (
-        !ifLogged.value &&
-        currentPath !== '/login'
-      ) {
-        this.props.history.push('/login')
-      }
+  componentWillReceiveProps(nextProps) {
+    if (!this.isLocationAllowed(nextProps) && this.isConnected(nextProps)) {
+      this.updateLocation(nextProps)
     }
   }
+  updateLocation(props) {
+    const {
+      location,
+      displaySetup,
+      isLogged,
+      history,
+    } = props
+    const { pathname } = location
+    if (displaySetup.value && pathname !== '/setup') {
+      history.push('/setup')
+    } else if (!isLogged.value && pathname !== '/login') {
+      history.push('/login')
+    } else {
+      history.push('/')
+    }
+  }
+  isLocationAllowed(props) {
+    const { displaySetup, isLogged } = props
+    const { pathname } = location
+
+    if (displaySetup.value && pathname !== '/setup') {
+      return false
+    } else if (!displaySetup.value) {
+      if (isLogged.value && ['/setup', '/login'].includes(pathname)) {
+        return false
+      } else if (!isLogged.value && pathname !== '/login') {
+        return false
+      }
+    }
+    return true
+  }
+  isConnected(props) {
+    const {
+      isLogged,
+      displaySetup,
+      connected,
+    } = props
+
+    const status = (
+      connected.value
+        ? [
+          isLogged,
+          displaySetup,
+        ].every(res => res.status === 'resolved')
+        : false
+    )
+    return status
+  }
   render() {
-    const connectedToServices = this.props.connected.value
     return (
       <section role="main">
         {
-          connectedToServices
+          this.isConnected(this.props) && this.isLocationAllowed(this.props)
             ? this.props.children
-            : <Spin size="large" />
+            : <LoadingContent />
         }
       </section>
     )
