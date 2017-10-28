@@ -2,8 +2,8 @@ const fs = require('fs')
 const path = require('path')
 const google = require('googleapis')
 const GoogleAuth = require('google-auth-library')
-const debugSetup = require('debug')('api:gsheets:setup')
-const readline = require('readline')
+// const debugSetup = require('debug')('api:gsheets:setup')
+// const readline = require('readline')
 const { URL } = require('url')
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
