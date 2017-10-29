@@ -59,38 +59,38 @@ class LinkedSheets extends React.PureComponent {
 
     // linkedSheets contains dummy data that should be replaced later.
     const linkedSheets = [{
-      name: 'Voyage 1',
-      spreadsheetId: '1k5b22g5j',
+      name: 'spreadsheet 1',
+      spreadsheetId: '1dl2dX4K-CuospT5rHtK-GSr_dAOmVijz4k4aM750Ipg',
     }, {
-      name: 'Voyage 2',
-      spreadsheetId: '2k5b22g5j',
+      name: 'spreadsheet 2',
+      spreadsheetId: '1h4FhfXt1m2LfVS13YJuOWd9jSUu_xz5r-eFCwtzekhg',
     }, {
-      name: 'Voyage 3',
-      spreadsheetId: '3k5b22g5j',
+      name: 'spreadsheet 3',
+      spreadsheetId: '1_UMy96CeGkCrF5cNMA1cxLVP-E_xCV_Q-tZpziugf_g',
     }, {
       name: 'Voyage 4',
-      spreadsheetId: '4k5b22g5j',
+      spreadsheetId: '4xxxxxxxxx',
     }, {
       name: 'Voyage 5',
-      spreadsheetId: '5k5b22g5j',
+      spreadsheetId: '5xxxxxxxxx',
     }, {
       name: 'Voyage 6',
-      spreadsheetId: '6k5b22g5j',
+      spreadsheetId: '6xxxxxxxxx',
     }, {
       name: 'Voyage 7',
-      spreadsheetId: '7k5b22g5j',
+      spreadsheetId: '7xxxxxxxxx',
     }, {
       name: 'Voyage 8',
-      spreadsheetId: '8k5b22g5j',
+      spreadsheetId: '8xxxxxxxxx',
     }, {
       name: 'Voyage 9',
-      spreadsheetId: '9k5b22g5j',
+      spreadsheetId: '9xxxxxxxxx',
     }, {
       name: 'Voyage 10',
-      spreadsheetId: '105b22g5j',
+      spreadsheetId: '10xxxxxxxx',
     }, {
       name: 'Voyage 11',
-      spreadsheetId: '115b22g5j',
+      spreadsheetId: '11xxxxxxxx',
     }]
 
     return (
