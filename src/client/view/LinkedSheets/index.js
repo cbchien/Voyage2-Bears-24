@@ -31,7 +31,7 @@ class LinkedSheets extends React.PureComponent {
   unlinkSheet(id) {
     return () => {
       // TODO: actual logic for unlinking sheet
-      message.success(`Sheet with ID ${id} unlinked.`)
+      message.success(`Unlinked sheet with ID: ${id}`)
     }
   }
 
