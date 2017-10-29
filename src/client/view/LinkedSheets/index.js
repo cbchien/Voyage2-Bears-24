@@ -14,8 +14,6 @@ import {
 } from '../../component'
 
 // Todos:
-//
-// Add link to actual google spreadsheet for each spreadsheet ID.
 // Add actual logic for unlinking sheets.
 
 @registerPath({
@@ -25,6 +23,10 @@ import {
 })
 
 class LinkedSheets extends React.PureComponent {
+  getGoogleSheetURL(id) {
+    return `https://docs.google.com/spreadsheets/d/${id}`
+  }
+
   unlinkSheet(id) {
     return () => {
       // TODO: actual logic for unlinking sheet
@@ -41,7 +43,7 @@ class LinkedSheets extends React.PureComponent {
       title: 'Spreadsheet ID',
       dataIndex: 'spreadsheetId',
       key: 'spreadsheetId',
-      render: text => <a href="#todo_link_to_spreadsheet">{text}</a>,
+      render: id => <a href={this.getGoogleSheetURL(id)}>{id}</a>,
     }, {
       title: 'Action',
       dataIndex: 'spreadsheetId',
