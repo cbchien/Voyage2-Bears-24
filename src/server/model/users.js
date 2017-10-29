@@ -12,7 +12,7 @@ class DashboardUsers {
     if (!userSheet) {
       throw new Error('"users" sheet couldn\'t be found :(')
     }
-    const userRows = await gsheets.getRows(settingID, listOfSheets[1])
+    const userRows = await gsheets.getRows(settingID, userSheet)
     userRows.shift()
     return userRows
   }
