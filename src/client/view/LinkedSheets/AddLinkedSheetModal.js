@@ -18,6 +18,9 @@ const AddLinkedSheetForm = Form.create()(
       form,
     } = props
     const { getFieldDecorator } = form
+
+    const googleSheetRegex = /^(https:\/\/|http:\/\/)(docs.google.com\/spreadsheets\/d\/)([^/]+).*$/i
+
     return (
       <Modal
         visible={visible}
@@ -37,7 +40,12 @@ const AddLinkedSheetForm = Form.create()(
           </FormItem>
           <FormItem label="Spreadsheet URL">
             {getFieldDecorator('url', {
-              rules: [{ required: true, whitespace: true, message: 'URL of spreadsheet required!' }],
+              rules: [{
+                required: true,
+                whitespace: true,
+                pattern: googleSheetRegex,
+                message: 'Please enter a valid Google Sheets URL!',
+              }],
             })(
               <Input />,
             )}
