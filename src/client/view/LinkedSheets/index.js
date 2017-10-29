@@ -9,6 +9,7 @@ import {
   Icon,
 } from 'antd'
 import CommonView from '../CommonView'
+import AddLinkedSheetModal from './AddLinkedSheetModal'
 import {
   registerPath,
 } from '../../component'
@@ -97,7 +98,7 @@ class LinkedSheets extends React.PureComponent {
       <CommonView>
         <Row type="flex" justify="end">
           <Col>
-            <Button type="primary"><Icon type="link" />Add Link</Button>
+            <AddLinkedSheetModal />
           </Col>
         </Row>
         <br />
