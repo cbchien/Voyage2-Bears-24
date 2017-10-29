@@ -25,6 +25,22 @@ class GSheetsHelper {
     }
     return pathnameArgs[3]
   }
+
+  /**
+   * Gets a Google Spreadsheet's URL from an ID
+   *
+   * The URL should be in the following format:
+   * https://docs.google.com/spreadsheets/d/myIdGoesHere/...
+   *
+   * It should start with 'docs.google.com/spreadsheets/d/'
+   * followed by the spreadsheet ID and other arguments.
+   *
+   * @param {string} id - Google Spreadsheet's ID
+   * @return {string} Google Spreadsheet URL
+   */
+  getSheetUrlFromId(id) {
+    return `https://docs.google.com/spreadsheets/d/${id}`
+  }
 }
 
 export default new GSheetsHelper()

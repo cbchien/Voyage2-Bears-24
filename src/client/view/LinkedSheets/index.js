@@ -8,6 +8,7 @@ import {
   Col,
   Icon,
 } from 'antd'
+import GSheetsHelper from '../../helper/gsheets'
 import CommonView from '../CommonView'
 import AddLinkedSheetModal from './AddLinkedSheetModal'
 import {
@@ -41,7 +42,7 @@ class LinkedSheets extends React.PureComponent {
       title: 'Spreadsheet ID',
       dataIndex: 'spreadsheetId',
       key: 'spreadsheetId',
-      render: id => <a href={this.getGoogleSheetURL(id)}>{id}</a>,
+      render: id => <a href={GSheetsHelper.getSheetUrlFromId(id)}>{id}</a>,
     }, {
       title: 'Action',
       dataIndex: 'spreadsheetId',
