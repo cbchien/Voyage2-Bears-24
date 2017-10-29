@@ -14,9 +14,6 @@ import {
   registerPath,
 } from '../../component'
 
-// Todos:
-// Add actual logic for unlinking sheets.
-
 @registerPath({
   path: '/linkedSheets',
   title: 'Linked Sheets',
