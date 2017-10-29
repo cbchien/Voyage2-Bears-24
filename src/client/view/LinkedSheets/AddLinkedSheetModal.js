@@ -6,6 +6,7 @@ import {
   Input,
   Icon,
 } from 'antd'
+import GSheetsHelper from '../../helper/gsheets'
 const FormItem = Form.Item
 
 const AddLinkedSheetForm = Form.create()(
@@ -65,9 +66,10 @@ class AddLinkedSheetModal extends React.PureComponent {
       }
 
       // TODO:
-      // Process URL and obtain spreadsheet ID.
       // Submit spreadsheet name and ID.
-      console.log('Received values of form: ', values)
+      const { name, url } = values
+      const spreadsheetId = GSheetsHelper.getSheetIdFromUrl(url)
+      console.log(`Name: ${name}, ID: ${spreadsheetId}`)
       form.resetFields()
       this.setState({ visible: false })
     })
