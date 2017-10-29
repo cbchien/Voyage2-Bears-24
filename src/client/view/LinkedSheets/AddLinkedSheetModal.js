@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Button,
   Modal,
+  message,
   Form,
   Input,
   Icon,
@@ -77,7 +78,7 @@ class AddLinkedSheetModal extends React.PureComponent {
       // Submit spreadsheet name and ID.
       const { name, url } = values
       const spreadsheetId = GSheetsHelper.getSheetIdFromUrl(url)
-      console.log(`Name: ${name}, ID: ${spreadsheetId}`)
+      message.success(`Name: ${name}, ID: ${spreadsheetId}`)
       form.resetFields()
       this.setState({ visible: false })
     })
