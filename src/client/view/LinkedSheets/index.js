@@ -55,6 +55,7 @@ class LinkedSheets extends React.PureComponent {
       ),
     }]
 
+    // linkedSheets contains dummy data that should be replaced later.
     const linkedSheets = [{
       name: 'Voyage 1',
       spreadsheetId: '1k5b22g5j',
@@ -92,14 +93,13 @@ class LinkedSheets extends React.PureComponent {
 
     return (
       <CommonView>
-        {/* <Table columns={columns} dataSource={linkedSheets} pagination={{ pageSize: 5 }} /> */}
         <Row type="flex" justify="end">
           <Col>
             <Button type="primary"><Icon type="link" />Add Link</Button>
           </Col>
         </Row>
         <br />
-        <Table rowKey="spreadsheetId" columns={columns} dataSource={linkedSheets} />
+        <Table rowKey="spreadsheetId" columns={columns} dataSource={linkedSheets} pagination={{ total: linkedSheets.length, pageSize: 5 }} />
       </CommonView>
     )
   }
