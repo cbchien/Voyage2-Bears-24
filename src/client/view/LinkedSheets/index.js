@@ -96,7 +96,10 @@ class LinkedSheets extends React.PureComponent {
 
     return (
       <CommonView>
-        <Row type="flex" justify="end">
+        <Row type="flex" justify="space-between">
+          <Col>
+            <h1>Linked Sheets</h1>
+          </Col>
           <Col>
             <AddLinkedSheetModal />
           </Col>
