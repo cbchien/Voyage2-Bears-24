@@ -21,7 +21,7 @@ const AddLinkedSheetForm = Form.create()(
       <Modal
         visible={visible}
         title="Link a new spreadsheet"
-        okText="Link"
+        okText="Add Link"
         cancelText="Cancel"
         onCancel={onCancel}
         onOk={onCreate}
