@@ -1,13 +1,92 @@
 import React from 'react'
 import {
   Button,
+  Modal,
+  Form,
+  Input,
   Icon,
 } from 'antd'
+const FormItem = Form.Item
+
+const AddLinkedSheetForm = Form.create()(
+  (props) => {
+    const {
+      visible,
+      onCancel,
+      onCreate,
+      form,
+    } = props
+    const { getFieldDecorator } = form
+    return (
+      <Modal
+        visible={visible}
+        title="Link a new spreadsheet"
+        okText="Link"
+        cancelText="Cancel"
+        onCancel={onCancel}
+        onOk={onCreate}
+      >
+        <Form layout="vertical">
+          <FormItem label="Name">
+            {getFieldDecorator('name', {
+              rules: [{ required: true, whitespace: true, message: 'Name of spreadsheet required!' }],
+            })(
+              <Input />,
+            )}
+          </FormItem>
+          <FormItem label="Spreadsheet URL">
+            {getFieldDecorator('url', {
+              rules: [{ required: true, whitespace: true, message: 'URL of spreadsheet required!' }],
+            })(
+              <Input />,
+            )}
+          </FormItem>
+        </Form>
+      </Modal>
+    )
+  },
+)
 
 class AddLinkedSheetModal extends React.PureComponent {
+  state = {
+    visible: false,
+  }
+  showModal = () => {
+    this.setState({ visible: true })
+  }
+  handleCancel = () => {
+    this.setState({ visible: false })
+  }
+  handleCreate = () => {
+    const { form } = this
+    form.validateFields((err, values) => {
+      if (err) {
+        return
+      }
+
+      // TODO:
+      // Process URL and obtain spreadsheet ID.
+      // Submit spreadsheet name and ID.
+      console.log('Received values of form: ', values)
+      form.resetFields()
+      this.setState({ visible: false })
+    })
+  }
+  linkSheetFormRef = (form) => {
+    this.form = form
+  }
+
   render() {
     return (
-      <Button type="primary"><Icon type="link" />Add Link</Button>
+      <div>
+        <Button type="primary" onClick={this.showModal}><Icon type="link" />Add Link</Button>
+        <AddLinkedSheetForm
+          ref={this.linkSheetFormRef}
+          visible={this.state.visible}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+        />
+      </div>
     )
   }
 }
