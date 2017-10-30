@@ -25,20 +25,18 @@ import {
 
 class Users extends React.PureComponent {
   state = { visible: false }
-  showModal = () => {
-    this.setState({
-      visible: true,
-    })
-  }
-  handleOk = () => {
-    this.setState({
-      visible: false,
-    })
-  }
-  handleCancel = () => {
-    this.setState({
-      visible: false,
-    })
+
+  getUsers() {
+    // TODO: fetch user information
+    // Need to define client side service to call gshhet getUsers()
+    return () => {
+      // parseUserRows() with .shift() removes title [username, password] already
+      // need to chagnge the format into [{
+      // Username: 'Tester1',
+      // }, {
+      //  Username: 'Tester2',
+      // }]
+    }
   }
 
   removeUser(user) {
@@ -59,17 +57,20 @@ class Users extends React.PureComponent {
     }
   }
 
-  getUsers() {
-    // TODO: fetch user information
-    // Need to define client side service to call gshhet getUsers()
-    return () => {
-      // parseUserRows() with .shift() removes title [username, password] already
-      // need to chagnge the format into [{
-      // Username: 'Tester1',
-      // }, {
-      //  Username: 'Tester2',
-      // }]
-    }
+  showModal = () => {
+    this.setState({
+      visible: true,
+    })
+  }
+  handleOk = () => {
+    this.setState({
+      visible: false,
+    })
+  }
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    })
   }
 
   render() {
