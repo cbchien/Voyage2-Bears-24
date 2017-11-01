@@ -12,9 +12,11 @@ import {
 } from 'antd'
 
 import CommonView from '../CommonView'
+import UpdatePasswordModal from './UpdatePasswordModal'
 
 import {
   registerPath,
+  bind,
 } from '../../component'
 
 @registerPath({
@@ -22,57 +24,15 @@ import {
   title: 'Authorized Users',
   icon: 'user',
 })
-
 class Users extends React.PureComponent {
-  state = { visible: false }
-
-  getUsers() {
-    // TODO: fetch user information
-    // Need to define client side service to call gshhet getUsers()
-    return () => {
-      // parseUserRows() with .shift() removes title [username, password] already
-      // need to chagnge the format into [{
-      // Username: 'Tester1',
-      // }, {
-      //  Username: 'Tester2',
-      // }]
-    }
+  state = {
+    isModalVisible: false,
   }
-
-  removeUser(user) {
-    return () => {
-      // TODO: actual logic for reseting password
-      // Need to define client side service
-      // Find and delete api for server side service
-      message.success(`Removed User: ${user}`)
-    }
-  }
-
-  restSetPassword(user, pwd) {
-    return () => {
-      // TODO: actual logic for reseting password
-      // Need to define client side service
-      // Find and update api for server side service
-      message.success(`Updated: ${user} with new password ${pwd}`)
-    }
-  }
-
-  showModal = () => {
+  @bind toggleModal() {
     this.setState({
-      visible: true,
+      isModalVisible: !this.state.isModalVisible,
     })
   }
-  handleOk = () => {
-    this.setState({
-      visible: false,
-    })
-  }
-  handleCancel = () => {
-    this.setState({
-      visible: false,
-    })
-  }
-
   render() {
     // Need a client side service to talk to server side model/user getUsers()
     const authorizedUsers = [{
@@ -94,26 +54,24 @@ class Users extends React.PureComponent {
       dataIndex: '',
       key: 'action',
       fixed: 'right',
-      width: 300,
-      render: username => (
+      width: 245,
+      render: () => (
         <span>
-          <Button type="primary" onClick={this.showModal}>Reset Password</Button>
-          <Modal
-            title="Basic Modal"
-            visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-            okText="Done"
-            cancelText="Exit"
-          >
-            <Input placeholder="New Password" />
-            <Popconfirm title="Update this password?" onConfirm={this.restSetPassword(username)} okText="Yes" cancelText="No">
-              <Button><Icon type="solution" />Reset Password</Button>
-            </Popconfirm>
-          </Modal>
+          <Button
+            type="primary"
+            onClick={this.toggleModal}
+          >Reset Password
+          </Button>
           <span className="ant-divider" />
-          <Popconfirm title="Delete this user?" onConfirm={this.removeUser(username)} okText="Yes" cancelText="No">
-            <Button type="danger"><Icon type="user-delete" /> Delete </Button>
+          <Popconfirm
+            title="Delete this user?"
+            onConfirm={() => {}}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="danger">
+              <Icon type="user-delete" />Delete
+            </Button>
           </Popconfirm>
         </span>
       ),
@@ -126,8 +84,17 @@ class Users extends React.PureComponent {
             <h1>Authorized Users</h1>
           </Col>
         </Row>
-        <br />
-        <Table rowKey="Username" columns={columns} dataSource={authorizedUsers} pagination={{ total: authorizedUsers.length, pageSize: 10 }} />
+        <UpdatePasswordModal
+          onCancel={this.toggleModal}
+          onOk={this.toggleModal}
+          visible={this.state.isModalVisible}
+        />
+        <Table
+          rowKey="Username"
+          columns={columns}
+          dataSource={authorizedUsers}
+          pagination={{ total: authorizedUsers.length, pageSize: 10 }}
+        />
       </CommonView>
     )
   }
