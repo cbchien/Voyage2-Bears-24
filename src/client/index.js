@@ -16,6 +16,7 @@ import Setup from './view/Setup'
 import Login from './view/Login'
 import Home from './view/Home'
 import LinkedSheets from './view/LinkedSheets'
+import Users from './view/Users'
 import Workflows from './view/Workflows'
 import Settings from './view/Settings'
 
@@ -49,6 +50,7 @@ render(
           <Route exact path="/" component={Home} />
           <Route exact path="/settings" component={Settings} />
           <Route exact path="/linkedSheets" component={LinkedSheets} />
+          <Route exact path="/users" component={Users} />
           <Route exact path="/workflows" component={Workflows} />
           <Route component={NotFound} />
         </Switch>
