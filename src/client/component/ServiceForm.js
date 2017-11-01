@@ -116,12 +116,17 @@ class ServiceForm extends React.Component {
   mapChildren() {
     const children = React.Children.map(this.props.children,
       (InputComponent) => {
-        const { name } = InputComponent.props
+        const {
+          name,
+          htmlType,
+          type,
+        } = InputComponent.props
+        if (type === 'hidden') return InputComponent
         if (typeof name !== 'undefined') {
           this.data[name] = null
           this.keys.push(name)
         }
-        return InputComponent.props.htmlType !== 'submit'
+        return htmlType !== 'submit'
           ? (
             <Form.Item
               {...this.props.itemLayout}
