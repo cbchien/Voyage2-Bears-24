@@ -3,10 +3,10 @@ const users = require('../model/users')
 
 class Users extends ServerNamespace {
   async connection() {
-    await this.fetachUsers()
+    await this.fetchUsers()
   }
 
-  async fetachUsers() {
+  async fetchUsers() {
     const data = await users.getUsers()
     this.emitClientEvent('fetch users', data)
   }
