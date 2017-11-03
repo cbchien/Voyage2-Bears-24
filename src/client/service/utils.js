@@ -236,6 +236,8 @@ export const applyServices = createStore => (reducer, preloadedState, enhancer) 
 }
 
 export const Namespace = namespace => (Constructor) => {
+  /* eslint-disable */
   Constructor.prototype[privateProps.manager] = manager.socket(namespace)
   return Constructor
+  /* eslint-enable */
 }
