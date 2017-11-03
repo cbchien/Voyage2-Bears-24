@@ -1,50 +1,61 @@
 const { ServerNamespace } = require('./utils')
 const users = require('../model/users')
-const debugUsers = require('debug')('service:Users')
+// const debugUsers = require('debug')('service:Users')
 
 class Users extends ServerNamespace {
   async connection() {
     // await this.fetchUsers()
   }
 
-  async fetchUsers(data, reply) {
+  async fetchUsers(noData, reply) {
     try {
-      data = await users.getUsers()
-      this.emitClientEvent('fetch users', data)
-      debugUsers('Successfully fetched authorized users')      
+      const data = await users.getUsers()
       reply({
         userList: data,
-        fetchUsers: 'OK'
+        status: 'OK!',
       })
-    } catch (error) {
+    } catch ({ message }) {
       reply({
         hasError: true,
-        generalError: { message: error.message, type: 'error'},
+        generalError: { message, type: 'error' },
       })
-      debugUsers(error.message)
     }
   }
 
-  async deleteUser(username) {
+  async deleteUser(data, reply) {
     try {
-      const check = await users.deleteUser(username)
-      this.emitClientEvent('delete users', username)  
-    } catch (error) {
-      debugUsers(error)
+      const validate = this.hasRequiredFields(data, [
+        'username',
+      ])
+      if (validate.hasError) {
+        reply(validate)
+      } else {
+        const { username } = data
+        await users.deleteUser(username)
+        reply({ status: 'OK!' })
+      }
+    } catch ({ message }) {
+      reply({
+        hasError: true,
+        generalError: { message, type: 'error' },
+      })
     }
   }
 
-  async updatePassword(username, password) {
-    const validate = this.hasRequiredFields(username,['username'],true)
-    if (validate.hasError) {
-      return debugUsers(validate)
-    }
+  async updatePassword(data, reply) {
     try {
-      const check = await users.updateUserPassword(username, password)
-      this.emitClientEvent('Updated password for users', username)
-      debugUsers('Updated password for users')
-    } catch (error) {
-      debugUsers(error)
+      const validate = this.hasRequiredFields(data, [
+        'username',
+      ], true)
+      if (validate.hasError) {
+        reply(validate)
+      } else {
+        const { username, password } = data
+        await users.updateUserPassword(username, password)
+        reply({ status: 'OK!' })
+      }
+    } catch ({ message }) {
+      reply({ hasError: true, generalError: { message } })
     }
   }
 }
