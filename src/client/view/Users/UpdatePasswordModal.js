@@ -19,7 +19,9 @@ class UpdatePasswordModal extends React.Component {
     password: { required: true, label: 'New Password' },
   }
   @bind handleRef(ref) {
-    this.orgForm = ref.refs.input.form
+    if (ref && ref.refs) {
+      this.orgForm = ref.refs.input.form
+    }
   }
   @bind handleOnOk() {
     this.orgForm.dispatchEvent(new Event('submit'))
