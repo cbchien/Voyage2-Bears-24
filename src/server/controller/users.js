@@ -4,17 +4,18 @@ const debugUsers = require('debug')('service:Users')
 
 class Users extends ServerNamespace {
   async connection() {
-    await this.fetchUsers()
+    // await this.fetchUsers()
   }
 
-  async fetchUsers(reply) {
+  async fetchUsers(data, reply) {
     try {
-      const data = await users.getUsers()
+      data = await users.getUsers()
       this.emitClientEvent('fetch users', data)
+      debugUsers('Successfully fetched authorized users')      
       reply({
+        userList: data,
         fetchUsers: 'OK'
       })
-      debugUsers('Successfully fetched authorized users')
     } catch (error) {
       reply({
         hasError: true,
