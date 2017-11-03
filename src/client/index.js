@@ -28,6 +28,7 @@ const store = createStore(combineReducers(mapServiceToStore({
   main: service.main,
   setup: service.setup,
   login: service.login,
+  user: service.users,
 })), compose(
   applyServices,
   devToolsEnhancer({
