@@ -8,8 +8,12 @@ import {
   Icon,
 } from 'antd'
 
+// import propTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import CommonView from '../CommonView'
 import UpdatePasswordModal from './UpdatePasswordModal'
+import service from '../../service'
 
 import {
   registerPath,
@@ -22,9 +26,30 @@ import {
   icon: 'user',
 })
 class Users extends React.PureComponent {
-  state = {
-    isModalVisible: false,
+  static propTypes = {
+    // userlist: propTypes.array.isRequired,
   }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      isModalVisible: false,
+    }
+  }
+
+  componentWillMount() {
+    this.displayUsers()
+  }
+
+  componentDidMount() {
+    // need to re-map states to props after displayUsers() is called
+  }
+
+  displayUsers() {
+    const fetchUser = service.users.fetchUsers
+    return fetchUser()
+  }
+
   @bind toggleModal() {
     this.setState({
       isModalVisible: !this.state.isModalVisible,
@@ -97,5 +122,9 @@ class Users extends React.PureComponent {
   }
 }
 
-export default Users
+export default withRouter(connect(
+  state => ({
+    userlist: state.user.userlist,
+  }),
+)(Users))
 
