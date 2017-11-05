@@ -22,7 +22,7 @@ class LinkedSheets {
    * @return {Promise<Array>} list of linkedSheets in the format [[name, linkedSheetId, metadata], ...]
    */
   async fetchLinkedSheets() {
-    const linkedSheetsSheet = this.getLinkedSheetsSheet()
+    const linkedSheetsSheet = await this.getLinkedSheetsSheet()
     const linkedSheetRows = await gsheets.getRows(SETTINGS_DOC_ID, linkedSheetsSheet)
     linkedSheetRows.shift()
     return linkedSheetRows
@@ -37,10 +37,25 @@ class LinkedSheets {
    * @return {Promise} The result of calling appendRows
    */
   async addLinkedSheet(name, sheetID) {
-    const linkedSheetsSheet = this.getLinkedSheetsSheet()
+    const linkedSheetsSheet = await this.getLinkedSheetsSheet()
     return gsheets.appendRows(SETTINGS_DOC_ID, linkedSheetsSheet, [
       [name, sheetID],
     ])
+  }
+
+  /**
+   * Links a Google Spreadsheet Document by its ID to the application.
+   * The sheetID is saved in the "linkedSheets" sheet in the Settings
+   * Document
+   * @param {string} name - Name of the Document
+   * @param {string} sheetID - The Google Spreadsheet ID to link
+   * @return {Promise} The result of calling appendRows
+   */
+  async unlinkSheet(sheetID) {
+    const linkedSheets = await this.fetchLinkedSheets()
+    const indexToDelete = linkedSheets.findIndex(sheet => sheet[1] === sheetID) + 2
+
+    return gsheets.deleteRows(SETTINGS_DOC_ID, linkedSheets, indexToDelete, indexToDelete + 1)
   }
 }
 

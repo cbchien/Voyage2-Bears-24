@@ -39,25 +39,25 @@ class LinkedSheets extends ServerNamespace {
     }
   }
 
-  // async unlinkSheet(data, reply) {
-  //   try {
-  //     const validate = this.hasRequiredFields(data, [
-  //       'linkedSheetId',
-  //     ])
-  //     if (validate.hasError) {
-  //       reply(validate)
-  //     } else {
-  //       const { linkedSheetId } = data
-  //       await linkedSheets.unlinkSheet(linkedSheetId)
-  //       reply({ status: 'OK!' })
-  //     }
-  //   } catch ({ message }) {
-  //     reply({
-  //       hasError: true,
-  //       generalError: { message, type: 'error' },
-  //     })
-  //   }
-  // }
+  async unlinkSheet(data, reply) {
+    try {
+      const validate = this.hasRequiredFields(data, [
+        'linkedSheetId',
+      ])
+      if (validate.hasError) {
+        reply(validate)
+      } else {
+        const { linkedSheetId } = data
+        await linkedSheets.unlinkSheet(linkedSheetId)
+        reply({ status: 'OK!' })
+      }
+    } catch ({ message }) {
+      reply({
+        hasError: true,
+        generalError: { message, type: 'error' },
+      })
+    }
+  }
 }
 
 module.exports = LinkedSheets
