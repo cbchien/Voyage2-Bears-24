@@ -54,7 +54,9 @@ class LinkedSheets {
   async unlinkSheet(sheetID) {
     const linkedSheets = await this.fetchLinkedSheets()
     const indexToDelete = linkedSheets.findIndex(sheet => sheet[1] === sheetID) + 2
-
+    if (indexToDelete === -1) {
+      return null
+    }
     return gsheets.deleteRows(SETTINGS_DOC_ID, linkedSheets, indexToDelete, indexToDelete + 1)
   }
 }
