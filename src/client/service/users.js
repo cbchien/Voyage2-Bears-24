@@ -10,11 +10,14 @@ class Users extends Service {
   state = {
     fetched: pending(false),
     userlist: pending(''),
+    deleteProgress: pending(''),
   }
 
   type = {
     FETCHING_COMPLETE: Symbol('User::Fetching action done?'),
     FETCHED_USER_LIST: Symbol('User::Fetched userlist'),
+    DELETE_USER_START: Symbol('User::Deleting user'),
+    DELETE_USER_END: Symbol('User::Deleted user'),
   }
 
   async fetchUsers() {
@@ -38,12 +41,26 @@ class Users extends Service {
   }
 
   deleteUser(data) {
+    this.dispatchAs(this.type.DELETE_USER_START, {
+      deleteProgress: 'pending',
+    })
     this.askServer('deleteUser', data, (answer) => {
       if (answer.hasError) {
-        // some cb to display message
+        this.dispatchAs(this.type.DELETE_USER_END, {
+          deleteProgress: 'error',
+        })
       } else {
+        this.dispatchAs(this.type.DELETE_USER_END, {
+          deleteProgress: 'ready',
+        })
         this.fetchUsers()
       }
+    })
+  }
+
+  updatePassword(data) {
+    this.askServer('deleteUser', data, (answer) => {
+      console.log(answer)
     })
   }
 }
