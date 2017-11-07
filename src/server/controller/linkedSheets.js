@@ -10,7 +10,7 @@ class LinkedSheets extends ServerNamespace {
     try {
       const data = await linkedSheets.fetchLinkedSheets()
       reply({
-        userList: data,
+        linkedSheetsList: data,
         status: 'OK!',
       })
     } catch ({ message }) {
