@@ -8,7 +8,7 @@ import {
   Icon,
 } from 'antd'
 
-// import propTypes from 'prop-types'
+import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import CommonView from '../CommonView'
@@ -27,27 +27,24 @@ import {
 })
 class Users extends React.PureComponent {
   static propTypes = {
-    // userlist: propTypes.array.isRequired,
+    userlist: propTypes.array,
+    fetched: propTypes.object,
+  }
+  static defaultProps = {
+    userlist: [],
+    fetched: false,
   }
 
-  constructor(props) {
-    super(props)
+  constructor(...rest) {
+    super(...rest)
     this.state = {
       isModalVisible: false,
     }
   }
 
-  componentWillMount() {
-    this.displayUsers()
-  }
-
   componentDidMount() {
-    // need to re-map states to props after displayUsers() is called
-  }
-
-  displayUsers() {
     const fetchUser = service.users.fetchUsers
-    return fetchUser()
+    fetchUser()
   }
 
   @bind toggleModal() {
@@ -56,16 +53,16 @@ class Users extends React.PureComponent {
     })
   }
   render() {
-    // Need a client side service to talk to server side model/user getUsers()
-    const authorizedUsers = [{
-      Username: 'Tester1',
-    }, {
-      Username: 'Tester2',
-    }, {
-      Username: 'Tester3',
-    }, {
-      Username: 'Tester4',
-    }]
+    let authorizedUsers = []
+    console.log(this.props)
+    if (this.props.fetched.status === 'pending') {
+      authorizedUsers = [{ Username: 'LOADING' }]
+    } else if (this.props.fetched.status === 'resolved') {
+      console.log(this.props)
+      authorizedUsers = this.props.userlist.map(user => ({
+        Username: user,
+      }))
+    }
 
     const columns = [{
       title: 'Username',
@@ -122,9 +119,12 @@ class Users extends React.PureComponent {
   }
 }
 
+const mapStateToProps = state => ({
+  userlist: state.user.userlist.users,
+  fetched: state.user.fetched,
+})
+
 export default withRouter(connect(
-  state => ({
-    userlist: state.user.userlist,
-  }),
+  mapStateToProps,
 )(Users))
 

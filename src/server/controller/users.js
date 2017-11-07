@@ -11,7 +11,7 @@ class Users extends ServerNamespace {
     try {
       const data = await users.getUsers()
       reply({
-        userList: data,
+        users: data,
         status: 'OK!',
       })
     } catch ({ message }) {

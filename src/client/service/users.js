@@ -17,7 +17,7 @@ class Users extends Service {
     FETCHED_USER_LIST: Symbol('User::Fetched userlist'),
   }
 
-  fetchUsers() {
+  async fetchUsers() {
     const data = 'fetch user request'
     this.askServer('fetchUsers', data, (answer) => {
       let users = ['no user']
@@ -27,9 +27,10 @@ class Users extends Service {
         this.dispatchAs(this.type.FETCHING_COMPLETE, {
           fetched: resolved(true),
         })
-        users = answer.userList
+        users = answer
         this.dispatchAs(this.type.FETCHED_USER_LIST, {
           userlist: users,
+          fetched: resolved(true),
         })
       }
       return users
