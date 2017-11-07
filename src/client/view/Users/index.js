@@ -6,13 +6,14 @@ import {
   Row,
   Col,
   Icon,
+  message,
 } from 'antd'
 
 import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import CommonView from '../CommonView'
-import UpdatePasswordModal from './UpdatePasswordModal'
+import UpdatePasswordModal from './updatePasswordModal'
 import service from '../../service'
 
 import {
@@ -43,8 +44,8 @@ class Users extends React.PureComponent {
   }
 
   componentDidMount() {
-    const fetchUser = service.users.fetchUsers
-    fetchUser()
+    // maybe another function to refresh user list after five minutes?
+    service.users.fetchUsers()
   }
 
   @bind toggleModal() {
@@ -52,13 +53,19 @@ class Users extends React.PureComponent {
       isModalVisible: !this.state.isModalVisible,
     })
   }
+
+  @bind handleDeleteClick(username) {
+    service.users.deleteUser({ username })
+    const hide = message.loading('Action in progress..', 0)
+    setTimeout(hide, 5000)
+  }
+
   render() {
+    // authorizedUsers as dataSource for ant-design table
     let authorizedUsers = []
-    console.log(this.props)
     if (this.props.fetched.status === 'pending') {
       authorizedUsers = [{ Username: 'LOADING' }]
     } else if (this.props.fetched.status === 'resolved') {
-      console.log(this.props)
       authorizedUsers = this.props.userlist.map(user => ({
         Username: user,
       }))
@@ -74,7 +81,7 @@ class Users extends React.PureComponent {
       key: 'action',
       fixed: 'right',
       width: 245,
-      render: () => (
+      render: record => (
         <span>
           <Button
             type="primary"
@@ -84,7 +91,7 @@ class Users extends React.PureComponent {
           <span className="ant-divider" />
           <Popconfirm
             title="Delete this user?"
-            onConfirm={() => {}}
+            onConfirm={() => this.handleDeleteClick(record.Username)}
             okText="Yes"
             cancelText="No"
           >

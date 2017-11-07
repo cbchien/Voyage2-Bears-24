@@ -36,6 +36,16 @@ class Users extends Service {
       return users
     })
   }
+
+  deleteUser(data) {
+    this.askServer('deleteUser', data, (answer) => {
+      if (answer.hasError) {
+        // some cb to display message
+      } else {
+        this.fetchUsers()
+      }
+    })
+  }
 }
 
 export default new Users()
