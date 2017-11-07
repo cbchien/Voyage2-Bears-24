@@ -3,16 +3,19 @@ import propTypes from 'prop-types'
 import {
   Input,
   Modal,
+  Button,
 } from 'antd'
 import {
   bind,
   ServiceForm,
 } from '../../component'
+import service from '../../service'
 
 class UpdatePasswordModal extends React.Component {
   static propTypes = {
     onCancel: propTypes.func.isRequired,
     onOk: propTypes.func.isRequired,
+    username: propTypes.object.isRequired,
     visible: propTypes.bool.isRequired,
   }
   rules = {
@@ -33,17 +36,25 @@ class UpdatePasswordModal extends React.Component {
         visible={this.props.visible}
         onOk={this.props.onOk}
         onCancel={this.props.onCancel}
-        okText="Reset Password"
+        okText="Complete"
         cancelText="Exit"
+        username={this.username}
       >
         <ServiceForm
           layout="vertical"
-          onSubmit={this.props.onOk}
+          onSubmit={service.users.updatePassword}
           itemLayout={null}
           rules={this.rules}
+          username={this.props.username}
         >
           <Input type="hidden" ref={this.handleRef} />
+          <Input name="username" value={this.props.username} />
           <Input name="password" placeholder="New Password" />
+          <Button
+            type="primary"
+            htmlType="submit"
+          > Update Password
+          </Button>
         </ServiceForm>
       </Modal>
     )

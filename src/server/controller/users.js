@@ -44,13 +44,12 @@ class Users extends ServerNamespace {
 
   async updatePassword(data, reply) {
     try {
-      const validate = this.hasRequiredFields(data, [
-        'username',
-      ], true)
+      // data is nested under data?
+      const validate = this.hasRequiredFields(data.data, ['username', 'password'], true)
       if (validate.hasError) {
         reply(validate)
       } else {
-        const { username, password } = data
+        const { username, password } = data.data
         await users.updateUserPassword(username, password)
         reply({ status: 'OK!' })
       }

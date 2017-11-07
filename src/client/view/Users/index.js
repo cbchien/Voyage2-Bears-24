@@ -40,6 +40,7 @@ class Users extends React.PureComponent {
     super(...rest)
     this.state = {
       isModalVisible: false,
+      targetUser: {},
     }
   }
 
@@ -48,15 +49,18 @@ class Users extends React.PureComponent {
     service.users.fetchUsers()
   }
 
-  @bind toggleModal() {
+  @bind toggleModal(tempUser) {
     this.setState({
       isModalVisible: !this.state.isModalVisible,
+      // set username as tempUser
+      targetUser: { tempUser },
     })
   }
 
   @bind handleDeleteClick(username) {
     service.users.deleteUser({ username })
     const hide = message.loading('Action in progress..', 0)
+    // add logic to display and remove message.loading
     setTimeout(hide, 5000)
   }
 
@@ -85,7 +89,7 @@ class Users extends React.PureComponent {
         <span>
           <Button
             type="primary"
-            onClick={this.toggleModal}
+            onClick={() => this.toggleModal(record.Username)}
           >Reset Password
           </Button>
           <span className="ant-divider" />
@@ -114,6 +118,7 @@ class Users extends React.PureComponent {
           onCancel={this.toggleModal}
           onOk={this.toggleModal}
           visible={this.state.isModalVisible}
+          username={this.state.targetUser.tempUser}
         />
         <Table
           rowKey="Username"

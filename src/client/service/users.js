@@ -10,7 +10,8 @@ class Users extends Service {
   state = {
     fetched: pending(false),
     userlist: pending(''),
-    deleteProgress: pending(''),
+    deleteProcess: pending(''),
+    updatePwdProcess: pending(''),
   }
 
   type = {
@@ -18,6 +19,8 @@ class Users extends Service {
     FETCHED_USER_LIST: Symbol('User::Fetched userlist'),
     DELETE_USER_START: Symbol('User::Deleting user'),
     DELETE_USER_END: Symbol('User::Deleted user'),
+    UPDATE_PASSWORD_START: Symbol('User::Updating user password'),
+    UPDATE_PASSWORD_END: Symbol('User::Updated user password status?'),
   }
 
   async fetchUsers() {
@@ -42,16 +45,16 @@ class Users extends Service {
 
   deleteUser(data) {
     this.dispatchAs(this.type.DELETE_USER_START, {
-      deleteProgress: 'pending',
+      deleteProcess: 'pending',
     })
     this.askServer('deleteUser', data, (answer) => {
       if (answer.hasError) {
         this.dispatchAs(this.type.DELETE_USER_END, {
-          deleteProgress: 'error',
+          deleteProcess: 'error',
         })
       } else {
         this.dispatchAs(this.type.DELETE_USER_END, {
-          deleteProgress: 'ready',
+          deleteProcess: 'ready',
         })
         this.fetchUsers()
       }
@@ -59,8 +62,20 @@ class Users extends Service {
   }
 
   updatePassword(data) {
-    this.askServer('deleteUser', data, (answer) => {
-      console.log(answer)
+    // need to have ways of changeState for letting user know when th action is complete
+    this.dispatchAs(this.type.UPDATE_PASSWORD_START, {
+      updatePwdProcess: 'pending',
+    })
+    this.askServer('updatePassword', data, (answer) => {
+      if (answer.hasError) {
+        this.dispatchAs(this.type.UPDATE_PASSWORD_END, {
+          updatePwdProcess: 'error',
+        })
+      } else {
+        this.dispatchAs(this.type.UPDATE_PASSWORD_END, {
+          updatePwdProcess: 'ready',
+        })
+      }
     })
   }
 }
