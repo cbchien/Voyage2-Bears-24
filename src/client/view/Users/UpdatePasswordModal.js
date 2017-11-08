@@ -38,7 +38,7 @@ class UpdatePasswordModal extends React.Component {
     let message
     if (updatePwdProcess === 'pending') {
       message = <h4>Enter your new password</h4>
-    } else if (updatePwdProcess === 'ready') {
+    } else if (updatePwdProcess === 'resolved') {
       message = <h4 style={{ color: 'green' }}>Password successfully updated</h4>
     } else if (updatePwdProcess === 'error') {
       message = <h4>Password update error</h4>
