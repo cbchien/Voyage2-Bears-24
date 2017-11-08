@@ -30,6 +30,7 @@ class Users extends React.PureComponent {
   static propTypes = {
     userlist: propTypes.array,
     fetched: propTypes.object,
+    updatePwdProcess: propTypes.object.isRequired,
   }
   static defaultProps = {
     userlist: [],
@@ -55,6 +56,7 @@ class Users extends React.PureComponent {
       // set username as tempUser
       targetUser: { tempUser },
     })
+    this.props.updatePwdProcess.status = 'pending'
   }
 
   @bind handleDeleteClick(username) {
@@ -118,7 +120,8 @@ class Users extends React.PureComponent {
           onCancel={this.toggleModal}
           onOk={this.toggleModal}
           visible={this.state.isModalVisible}
-          username={this.state.targetUser.tempUser}
+          username={this.state.targetUser}
+          updatePwdProcess={this.props.updatePwdProcess.status}
         />
         <Table
           rowKey="Username"
@@ -134,6 +137,7 @@ class Users extends React.PureComponent {
 const mapStateToProps = state => ({
   userlist: state.user.userlist.users,
   fetched: state.user.fetched,
+  updatePwdProcess: state.user.updatePwdProcess,
 })
 
 export default withRouter(connect(

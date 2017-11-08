@@ -64,16 +64,22 @@ class Users extends Service {
   updatePassword(data) {
     // need to have ways of changeState for letting user know when th action is complete
     this.dispatchAs(this.type.UPDATE_PASSWORD_START, {
-      updatePwdProcess: 'pending',
+      updatePwdProcess: {
+        status: 'pending',
+      },
     })
     this.askServer('updatePassword', data, (answer) => {
       if (answer.hasError) {
         this.dispatchAs(this.type.UPDATE_PASSWORD_END, {
-          updatePwdProcess: 'error',
+          updatePwdProcess: {
+            status: 'error',
+          },
         })
       } else {
         this.dispatchAs(this.type.UPDATE_PASSWORD_END, {
-          updatePwdProcess: 'ready',
+          updatePwdProcess: {
+            status: 'ready',
+          },
         })
       }
     })

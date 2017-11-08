@@ -15,8 +15,12 @@ class UpdatePasswordModal extends React.Component {
   static propTypes = {
     onCancel: propTypes.func.isRequired,
     onOk: propTypes.func.isRequired,
-    username: propTypes.object.isRequired,
+    username: propTypes.object,
     visible: propTypes.bool.isRequired,
+    updatePwdProcess: propTypes.string.isRequired,
+  }
+  static defaultProps = {
+    username: {},
   }
   rules = {
     password: { required: true, label: 'New Password' },
@@ -30,6 +34,17 @@ class UpdatePasswordModal extends React.Component {
     this.orgForm.dispatchEvent(new Event('submit'))
   }
   render() {
+    const { updatePwdProcess } = this.props
+    let message
+    if (updatePwdProcess === 'pending') {
+      message = <h4>Enter your new password</h4>
+    } else if (updatePwdProcess === 'ready') {
+      message = <h4 style={{ color: 'green' }}>Password successfully updated</h4>
+    } else if (updatePwdProcess === 'error') {
+      message = <h4>Password update error</h4>
+    } else {
+      message = <h4>error reading props</h4>
+    }
     return (
       <Modal
         title="Basic Modal"
@@ -38,7 +53,6 @@ class UpdatePasswordModal extends React.Component {
         onCancel={this.props.onCancel}
         okText="Complete"
         cancelText="Exit"
-        username={this.username}
       >
         <ServiceForm
           layout="vertical"
@@ -46,15 +60,17 @@ class UpdatePasswordModal extends React.Component {
           itemLayout={null}
           rules={this.rules}
           username={this.props.username}
+          status={this.props.updatePwdProcess}
         >
           <Input type="hidden" ref={this.handleRef} />
-          <Input name="username" value={this.props.username} />
+          <Input name="username" value={this.props.username.tempUser} readOnly />
           <Input name="password" placeholder="New Password" />
           <Button
             type="primary"
             htmlType="submit"
           > Update Password
           </Button>
+          {message}
         </ServiceForm>
       </Modal>
     )
