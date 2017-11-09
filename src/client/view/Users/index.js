@@ -13,7 +13,7 @@ import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import CommonView from '../CommonView'
-import UpdatePasswordModal from './updatePasswordModal'
+import UpdatePasswordModal from './UpdatePasswordModal'
 import service from '../../service'
 
 import {
@@ -28,55 +28,46 @@ import {
 })
 class Users extends React.PureComponent {
   static propTypes = {
-    userlist: propTypes.array,
-    fetched: propTypes.object,
-    updatePwdProcess: propTypes.object.isRequired,
+    userlist: propTypes.object.isRequired,
+    deleteProcess: propTypes.object.isRequired,
   }
-  static defaultProps = {
-    userlist: [],
-    fetched: false,
+  state = {
+    isModalVisible: false,
+    targetUser: {},
   }
-
-  constructor(...rest) {
-    super(...rest)
-    this.state = {
-      isModalVisible: false,
-      targetUser: {},
-    }
-  }
-
-  componentDidMount() {
-    // maybe another function to refresh user list after five minutes?
-    service.users.fetchUsers()
-  }
-
-  @bind toggleModal(tempUser) {
+  @bind toggleModal(tempUser = '') {
     this.setState({
       isModalVisible: !this.state.isModalVisible,
-      // set username as tempUser
       targetUser: { tempUser },
     })
-    this.props.updatePwdProcess.status = 'pending'
   }
-
   @bind handleDeleteClick(username) {
     service.users.deleteUser({ username })
-    const hide = message.loading('Action in progress..', 0)
-    // add logic to display and remove message.loading
-    setTimeout(hide, 5000)
   }
-
-  render() {
-    // authorizedUsers as dataSource for ant-design table
-    let authorizedUsers = []
-    if (this.props.fetched.status === 'pending') {
-      authorizedUsers = [{ Username: 'LOADING' }]
-    } else if (this.props.fetched.status === 'resolved') {
-      authorizedUsers = this.props.userlist.map(user => ({
-        Username: user,
-      }))
+  componentDidUpdate() {
+    const { status, value } = this.props.deleteProcess
+    if (value !== null) { // When value is null, do not display any message
+      switch (status) {
+        case 'pending': {
+          this.hideMsg = message.loading(`Deleting user "${value}"...`, 0)
+          break
+        }
+        case 'rejected': {
+          this.hideMsg() // hide previous message
+          message.error(`Error while deleting user: ${value}`)
+          break
+        }
+        default: {
+          this.hideMsg() // hide previous message
+          message.success(`User "${value}" was deleted successfully`)
+        }
+      }
     }
-
+  }
+  componentDidMount() {
+    service.users.fetchUsers()
+  }
+  render() {
     const columns = [{
       title: 'Username',
       dataIndex: 'Username',
@@ -108,6 +99,7 @@ class Users extends React.PureComponent {
         </span>
       ),
     }]
+    const { userlist, deleteProcess } = this.props
 
     return (
       <CommonView>
@@ -121,26 +113,28 @@ class Users extends React.PureComponent {
           onOk={this.toggleModal}
           visible={this.state.isModalVisible}
           username={this.state.targetUser}
-          updatePwdProcess={this.props.updatePwdProcess.status}
         />
         <Table
           rowKey="Username"
           columns={columns}
-          dataSource={authorizedUsers}
-          pagination={{ total: authorizedUsers.length, pageSize: 10 }}
+          dataSource={userlist.value}
+          size="middle"
+          pagination={{ total: userlist.value.length, pageSize: 10 }}
+          locale={{ emptyText: 'No data' }}
+          loading={
+            userlist.status === 'pending' ||
+            deleteProcess.status === 'pending'
+          }
         />
       </CommonView>
     )
   }
 }
 
-const mapStateToProps = state => ({
-  userlist: state.user.userlist.users,
-  fetched: state.user.fetched,
-  updatePwdProcess: state.user.updatePwdProcess,
-})
-
 export default withRouter(connect(
-  mapStateToProps,
+  state => ({
+    userlist: state.user.userlist,
+    deleteProcess: state.user.deleteProcess,
+  }),
 )(Users))
 
