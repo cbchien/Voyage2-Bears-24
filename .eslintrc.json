@@ -16,6 +16,7 @@
     "react/forbid-prop-types": "off",
     "function-paren-newline": "off",
     "no-restricted-globals": "off",
+    "react/sort-comp": "off",
     "func-style": [
       "error",
       "expression"
