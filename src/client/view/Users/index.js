@@ -6,10 +6,15 @@ import {
   Row,
   Col,
   Icon,
+  message,
 } from 'antd'
 
+import propTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import CommonView from '../CommonView'
 import UpdatePasswordModal from './UpdatePasswordModal'
+import service from '../../service'
 
 import {
   registerPath,
@@ -22,26 +27,47 @@ import {
   icon: 'user',
 })
 class Users extends React.PureComponent {
+  static propTypes = {
+    userlist: propTypes.object.isRequired,
+    deleteProcess: propTypes.object.isRequired,
+  }
   state = {
     isModalVisible: false,
+    targetUser: {},
   }
-  @bind toggleModal() {
+  @bind toggleModal(tempUser = '') {
     this.setState({
       isModalVisible: !this.state.isModalVisible,
+      targetUser: { tempUser },
     })
   }
+  @bind handleDeleteClick(username) {
+    service.users.deleteUser({ username })
+  }
+  componentDidUpdate() {
+    const { status, value } = this.props.deleteProcess
+    if (value !== null) { // When value is null, do not display any message
+      switch (status) {
+        case 'pending': {
+          this.hideMsg = message.loading(`Deleting user "${value}"...`, 0)
+          break
+        }
+        case 'rejected': {
+          this.hideMsg() // hide previous message
+          message.error(`Error while deleting user: ${value}`)
+          break
+        }
+        default: {
+          this.hideMsg() // hide previous message
+          message.success(`User "${value}" was deleted successfully`)
+        }
+      }
+    }
+  }
+  componentDidMount() {
+    service.users.fetchUsers()
+  }
   render() {
-    // Need a client side service to talk to server side model/user getUsers()
-    const authorizedUsers = [{
-      Username: 'Tester1',
-    }, {
-      Username: 'Tester2',
-    }, {
-      Username: 'Tester3',
-    }, {
-      Username: 'Tester4',
-    }]
-
     const columns = [{
       title: 'Username',
       dataIndex: 'Username',
@@ -52,17 +78,17 @@ class Users extends React.PureComponent {
       key: 'action',
       fixed: 'right',
       width: 245,
-      render: () => (
+      render: record => (
         <span>
           <Button
             type="primary"
-            onClick={this.toggleModal}
+            onClick={() => this.toggleModal(record.Username)}
           >Reset Password
           </Button>
           <span className="ant-divider" />
           <Popconfirm
             title="Delete this user?"
-            onConfirm={() => {}}
+            onConfirm={() => this.handleDeleteClick(record.Username)}
             okText="Yes"
             cancelText="No"
           >
@@ -73,6 +99,7 @@ class Users extends React.PureComponent {
         </span>
       ),
     }]
+    const { userlist, deleteProcess } = this.props
 
     return (
       <CommonView>
@@ -85,17 +112,29 @@ class Users extends React.PureComponent {
           onCancel={this.toggleModal}
           onOk={this.toggleModal}
           visible={this.state.isModalVisible}
+          username={this.state.targetUser}
         />
         <Table
           rowKey="Username"
           columns={columns}
-          dataSource={authorizedUsers}
-          pagination={{ total: authorizedUsers.length, pageSize: 10 }}
+          dataSource={userlist.value}
+          size="middle"
+          pagination={{ total: userlist.value.length, pageSize: 10 }}
+          locale={{ emptyText: 'No data' }}
+          loading={
+            userlist.status === 'pending' ||
+            deleteProcess.status === 'pending'
+          }
         />
       </CommonView>
     )
   }
 }
 
-export default Users
+export default withRouter(connect(
+  state => ({
+    userlist: state.user.userlist,
+    deleteProcess: state.user.deleteProcess,
+  }),
+)(Users))
 

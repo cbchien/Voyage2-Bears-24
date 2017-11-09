@@ -19,7 +19,8 @@ class LinkedSheets {
 
   /**
    * Gets the list of linkedSheets from the `linkedSheets` sheet
-   * @return {Promise<Array>} list of linkedSheets in the format [[name, linkedSheetId, metadata], ...]
+   * @return {Promise<Array>} list of linkedSheets in the format
+   * [[name, linkedSheetId, metadata], ...]
    */
   async fetchLinkedSheets() {
     const linkedSheetsSheet = await this.getLinkedSheetsSheet()
