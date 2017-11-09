@@ -3,10 +3,6 @@ const users = require('../model/users')
 // const debugUsers = require('debug')('service:Users')
 
 class Users extends ServerNamespace {
-  async connection() {
-    // await this.fetchUsers()
-  }
-
   async fetchUsers(noData, reply) {
     try {
       const data = await users.getUsers()
@@ -44,17 +40,42 @@ class Users extends ServerNamespace {
 
   async updatePassword(data, reply) {
     try {
-      // data is nested under data?
-      const validate = this.hasRequiredFields(data.data, ['username', 'password'], true)
+      const validate = this.hasRequiredFields(data, [
+        'username',
+        'password',
+      ], true)
+
       if (validate.hasError) {
-        reply(validate)
+        reply(validate) // One or both fields are required
       } else {
-        const { username, password } = data.data
-        await users.updateUserPassword(username, password)
-        reply({ status: 'OK!' })
+        const {
+          username, // data.username exist if passed validation
+          password, // data.password exist if passed validation
+        } = data
+
+        // Check if password is empty or less than 6 chars
+        if (String(password).trim().length <= 6) {
+          // Reply with custom error message
+          reply({
+            hasError: true,
+            fieldErrors: {
+              password: {
+                validateStatus: 'error',
+                help: 'Password must contain more than 6 valid characters',
+              },
+            },
+          })
+        } else {
+          await users.updateUserPassword(username, password)
+          reply({ status: 'OK!' }) // If it doesn't throw any error,
+        }
       }
     } catch ({ message }) {
-      reply({ hasError: true, generalError: { message } })
+      // There was an error in users.updateUserPassword (This is General Error)
+      reply({
+        hasError: true,
+        generalError: { message, type: 'error' },
+      })
     }
   }
 }
