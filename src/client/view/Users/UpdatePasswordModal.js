@@ -3,7 +3,7 @@ import propTypes from 'prop-types'
 import {
   Input,
   Modal,
-  Button,
+  message,
 } from 'antd'
 import {
   bind,
@@ -15,62 +15,96 @@ class UpdatePasswordModal extends React.Component {
   static propTypes = {
     onCancel: propTypes.func.isRequired,
     onOk: propTypes.func.isRequired,
-    username: propTypes.object,
     visible: propTypes.bool.isRequired,
-    updatePwdProcess: propTypes.string.isRequired,
+    username: propTypes.object.isRequired,
   }
-  static defaultProps = {
-    username: {},
+  state = {
+    generalError: {},
+    formState: null,
   }
   rules = {
-    password: { required: true, label: 'New Password' },
+    password: { required: true, label: 'Introduce new password' },
+    username: { label: 'Username' },
   }
+  /**
+   * Create a copy of the instance of the form,
+   * so we can submit the form outside of the component
+   * @param {object} ref expecting instance of form
+   */
   @bind handleRef(ref) {
     if (ref && ref.refs) {
       this.orgForm = ref.refs.input.form
     }
   }
-  @bind handleOnOk() {
+  /**
+   * When pressing the Modal Button, dispatch a "submit"
+   * event on the form. We need this because the button in the
+   * modal is outside of the form
+   */
+  @bind whenUpdatePassword() {
     this.orgForm.dispatchEvent(new Event('submit'))
   }
-  render() {
-    const { updatePwdProcess } = this.props
-    let message
-    if (updatePwdProcess === 'pending') {
-      message = <h4>Enter your new password</h4>
-    } else if (updatePwdProcess === 'resolved') {
-      message = <h4 style={{ color: 'green' }}>Password successfully updated</h4>
-    } else if (updatePwdProcess === 'error') {
-      message = <h4>Password update error</h4>
+  /**
+   * The Service notifies the ServiceForm that the state changed when
+   * we call the changeState(state) method inside them.
+   * If changeState("done!"), "done!" is the received argument here
+   * @param {string} state it is passed through changeState(state) in Service
+   */
+  @bind whenStateChanges(state) {
+    if (state === 'done!') {
+      message.success('Password updated successfully')
+      this.props.onOk()
     } else {
-      message = <h4>error reading props</h4>
+      this.setState({
+        formState: state,
+      })
     }
+  }
+  /**
+   * The general error is handled manually since we can choose to display it or not
+   * @param {object} error an object representing the error { message, type }
+   */
+  @bind whenGeneralError(error) {
+    this.setState({
+      generalError: error,
+    })
+  }
+  render() {
+    const { onCancel } = this.props
+    const { generalError, formState } = this.state
     return (
       <Modal
         title="Basic Modal"
         visible={this.props.visible}
-        onOk={this.props.onOk}
-        onCancel={this.props.onCancel}
-        okText="Complete"
-        cancelText="Exit"
+        onOk={this.whenUpdatePassword}
+        onCancel={onCancel}
+        okText="Update Password"
+        cancelText="Cancel"
       >
+        <ServiceForm.Alert
+          message={generalError.message}
+          type={generalError.type}
+        />
         <ServiceForm
-          layout="vertical"
           onSubmit={service.users.updatePassword}
-          itemLayout={null}
+          onStateChange={this.whenStateChanges}
+          onError={this.whenGeneralError}
           rules={this.rules}
-          username={this.props.username}
-          status={this.props.updatePwdProcess}
+          itemLayout={null}
+          submitLayout={null}
         >
           <Input type="hidden" ref={this.handleRef} />
-          <Input name="username" value={this.props.username.tempUser} readOnly />
-          <Input name="password" placeholder="New Password" />
-          <Button
-            type="primary"
-            htmlType="submit"
-          > Update Password
-          </Button>
-          {message}
+          <Input
+            name="username"
+            value={this.props.username.tempUser}
+            readOnly
+          />
+          <Input
+            name="password"
+            type="password"
+            placeholder="New Password"
+            readOnly={formState === 'loading'}
+          />
         </ServiceForm>
       </Modal>
     )
