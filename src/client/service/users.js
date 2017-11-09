@@ -2,80 +2,98 @@ import {
   Namespace,
   pending,
   resolved,
+  rejected,
   Service,
 } from './utils'
 
 @Namespace('/users')
 class Users extends Service {
   state = {
-    fetched: pending(false),
-    userlist: pending(''),
-    deleteProcess: pending(''),
-    updatePwdProcess: pending(''),
+    userlist: pending([]),
+    deleteProcess: resolved(null),
   }
-
   type = {
-    FETCHING_COMPLETE: Symbol('User::Fetching action done?'),
-    FETCHED_USER_LIST: Symbol('User::Fetched userlist'),
-    DELETE_USER_START: Symbol('User::Deleting user'),
-    DELETE_USER_END: Symbol('User::Deleted user'),
-    UPDATE_PASSWORD_START: Symbol('User::Updating user password'),
-    UPDATE_PASSWORD_END: Symbol('User::Updated user password status?'),
+    FETCHED_USER_LIST: Symbol('User::Fetch userlist'),
+    DELETE_USER: Symbol('User::Delete user'),
   }
-
   async fetchUsers() {
-    const data = 'fetch user request'
-    this.askServer('fetchUsers', data, (answer) => {
-      let users = ['no user']
+    // Mark status of userlist as "pending"
+    // { userlist: { status: "pending", value: [] } }
+    this.dispatchAs(this.type.FETCHED_USER_LIST, {
+      userlist: pending([]),
+    })
+
+    this.askServer('fetchUsers', null, (answer) => {
       if (answer.hasError) {
-        // replyForm(answer.generalError)
-      } else {
-        this.dispatchAs(this.type.FETCHING_COMPLETE, {
-          fetched: resolved(true),
-        })
-        users = answer
+        // Mark status of userlist as "rejected"
+        // { userlist: { status: "rejected", value: [] } }
         this.dispatchAs(this.type.FETCHED_USER_LIST, {
-          userlist: users,
-          fetched: resolved(true),
+          userlist: rejected({}),
+        })
+      } else {
+        // Mark status of userlist as resolved
+        // { userlist: { status: "resolved", value: [...,{ Username }] } }
+        this.dispatchAs(this.type.FETCHED_USER_LIST, {
+          userlist: resolved(
+            answer.users.map(Username => ({ Username })),
+          ),
         })
       }
-      return users
     })
   }
 
   deleteUser(data) {
-    this.dispatchAs(this.type.DELETE_USER_START, {
-      deleteProcess: 'pending',
+    // Mark as { deleteProcess: { status: 'pending', value: '[USERNAME]' } }
+    this.dispatchAs(this.type.DELETE_USER, {
+      deleteProcess: pending(data.username),
     })
     this.askServer('deleteUser', data, (answer) => {
       if (answer.hasError) {
-        this.dispatchAs(this.type.DELETE_USER_END, {
-          deleteProcess: 'error',
+        // Mark as { deleteProcess: { status: 'rejected', value: '[ERROR]' } }
+        this.dispatchAs(this.type.DELETE_USER, {
+          deleteProcess: rejected(answer.generalError.message),
         })
       } else {
-        this.dispatchAs(this.type.DELETE_USER_END, {
-          deleteProcess: 'ready',
+        // Mark as { deleteProcess: { status: 'resolved', value: '[USERNAME]' } }
+        // At this point, Component gets updated and receives new props,
+        // A message box is displayed that the user was successfully updated
+        this.dispatchAs(this.type.DELETE_USER, {
+          deleteProcess: resolved(data.username),
+        })
+        // We set to null, so Component won't display the message box again when
+        // It updates the next time (this is the initial state of deleteProcess)
+        this.dispatchAs(this.type.DELETE_USER, {
+          deleteProcess: resolved(null),
         })
         this.fetchUsers()
       }
     })
   }
 
-  updatePassword(data, reject, replyForm) {
-    // need to have ways of changeState for letting user know when th action is complete
-    this.dispatchAs(this.type.UPDATE_PASSWORD_START, {
-      updatePwdProcess: pending(null),
-    })
+  updatePassword(form) {
+    const {
+      data, // Input fields' values { username, password }
+      changeState, // Lets the form know the state of the service
+      replyForm, // Ask the form to update fields rules or display general error
+    } = form
+    changeState('pending')
+    replyForm(
+      null, // null (because no general error)
+      { // Update rules to display loading spinner [name=password]
+        password: {
+          validateStatus: 'validating',
+          help: '',
+        },
+      },
+    )
     this.askServer('updatePassword', data, (answer) => {
       if (answer.hasError) {
-        replyForm(answer.generalError, answer.fieldsError)
-        this.dispatchAs(this.type.UPDATE_PASSWORD_END, {
-          updatePwdProcess: reject(null),
-        })
+        replyForm(
+          answer.generalError, // Display in ServiceForm.Alert
+          answer.fieldErrors, // Display in Inputs (Done Automatically)
+        )
       } else {
-        this.dispatchAs(this.type.UPDATE_PASSWORD_END, {
-          updatePwdProcess: resolved('Password Successfully Updated!'),
-        })
+        changeState('done!')
       }
     })
   }
