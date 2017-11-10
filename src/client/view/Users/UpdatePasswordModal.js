@@ -70,15 +70,19 @@ class UpdatePasswordModal extends React.Component {
       generalError: error,
     })
   }
+  @bind clearInputOnCancel() {
+    this.props.onCancel()
+    this.orgForm.password.value = ''
+    // this.orgForm.resetFields
+  }
   render() {
-    const { onCancel } = this.props
     const { generalError, formState } = this.state
     return (
       <Modal
         title="Basic Modal"
         visible={this.props.visible}
         onOk={this.whenUpdatePassword}
-        onCancel={onCancel}
+        onCancel={this.clearInputOnCancel}
         okText="Update Password"
         cancelText="Cancel"
       >
