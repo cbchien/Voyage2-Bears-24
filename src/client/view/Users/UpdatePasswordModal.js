@@ -54,6 +54,7 @@ class UpdatePasswordModal extends React.Component {
     if (state === 'done!') {
       message.success('Password updated successfully')
       this.props.onOk()
+      this.orgForm.password.value = ''
     } else {
       this.setState({
         formState: state,
