@@ -45,11 +45,10 @@ class LinkedSheets {
   }
 
   /**
-   * Links a Google Spreadsheet Document by its ID to the application.
-   * The sheetID is saved in the "linkedSheets" sheet in the Settings
-   * Document
-   * @param {string} name - Name of the Document
-   * @param {string} sheetID - The Google Spreadsheet ID to link
+   * Unlink a Google Spreadsheet Document by its ID.
+   * This action removes the corresponding entry in the
+   * "linkedSheets" sheet in the Settings Document.
+   * @param {string} sheetID - The Google Spreadsheet ID to unlink
    * @return {Promise} The result of calling appendRows
    */
   async unlinkSheet(sheetID) {
