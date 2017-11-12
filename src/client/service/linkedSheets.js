@@ -44,29 +44,25 @@ class LinkedSheets extends Service {
     })
   }
 
-  async addLinkedSheet(data) {
-    // Mark status of showAll as "pending"
-    // { showAll: { status: "pending", value: [] } }
-    // Mark status of addProcess as "pending"
-    // Mark as { addProcess: { status: 'pending', value: [{ name, linkedSheetId}] } }
-    this.dispatchAs(this.type.FETCHED_SHEETS_LIST, {
+  async addLinkedSheet(form) {
+    const { data } = form
+
+    this.dispatchAs(this.type.ADD_LINKED_SHEET, {
       showAll: pending([]),
-      addProcess: pending(data.values),
+      addProcess: pending(data),
     })
 
     this.askServer('addLinkedSheet', data, (answer) => {
       if (answer.hasError) {
-        // Mark as { addProcess: { status: 'rejected', value: [ERROR] } }
         this.dispatchAs(this.type.ADD_LINKED_SHEET, {
-          addProcess: rejected(answer.generalError.message),
+          addProcess: rejected(answer.generalError),
         })
       } else {
-        // Mark as { addProcess: { status: 'resolved', value: [linkedSheetId] } }
         this.dispatchAs(this.type.ADD_LINKED_SHEET, {
           addProcess: resolved(data.linkedSheetId),
         })
         // We set to null, so Component won't display the message box again when
-        // It updates the next time (this is the initial state of addProcess)
+        // it updates the next time (this is the initial state of addProcess)
         this.dispatchAs(this.type.ADD_LINKED_SHEET, {
           addProcess: resolved(null),
         })
@@ -75,13 +71,11 @@ class LinkedSheets extends Service {
     })
   }
 
-  async unlinkSheet(data) {
-    // Mark status of showAll as "pending"
-    // { showAll: { status: "pending", value: [] } }
-    // Mark status of deleteProcess as "pending"
-    // Mark as { deleteProcess: { status: 'pending', value: [linkedSheetId] } }
+  async unlinkSheet(form) {
+    const { data } = form
+
     this.dispatchAs(this.type.UNLINK_SHEET, {
-      deleteProcess: pending(data.linkedSheetId),
+      deleteProcess: pending(data),
     })
     this.askServer('unlinkSheet', data, (answer) => {
       if (answer.hasError) {

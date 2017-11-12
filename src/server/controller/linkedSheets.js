@@ -1,5 +1,6 @@
 const { ServerNamespace } = require('./utils')
 const linkedSheets = require('../model/linkedSheets')
+const gsheets = require('../model/gsheets')
 
 class LinkedSheets extends ServerNamespace {
   async connection() {
@@ -25,12 +26,13 @@ class LinkedSheets extends ServerNamespace {
     try {
       const validate = this.hasRequiredFields(data, [
         'name',
-        'linkedSheetId',
+        'url',
       ], true)
       if (validate.hasError) {
         reply(validate)
       } else {
-        const { name, linkedSheetId } = data
+        const { name, url } = data
+        const linkedSheetId = gsheets.getSheetIdFromUrl(url)
         await linkedSheets.addLinkedSheet(name, linkedSheetId)
         reply({ status: 'OK!' })
       }

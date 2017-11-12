@@ -51,10 +51,10 @@ class LinkedSheets extends React.PureComponent {
       key: 'action',
       fixed: 'right',
       width: 100,
-      render: () => (
+      render: id => (
         <Popconfirm
           title="Are you sure you want to unlink this sheet?"
-          onConfirm={() => {}}
+          onConfirm={() => { message.success(`Unlinked ${id}`) }}
           okText="Yes"
           cancelText="No"
         >
