@@ -8,8 +8,14 @@ import {
   Row,
   Table,
 } from 'antd'
+
+import propTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import CommonView from '../CommonView'
 import LinkedSheetModal from './LinkedSheetModal'
+import service from '../../service'
+
 import {
   registerPath,
   bind,
@@ -21,6 +27,10 @@ import {
   icon: 'file-excel',
 })
 class LinkedSheets extends React.PureComponent {
+  static propTypes = {
+    linkedSheetsList: propTypes.object.isRequired,
+    deleteProcess: propTypes.object.isRequired,
+  }
   state = {
     isModalVisible: false,
   }
@@ -32,6 +42,32 @@ class LinkedSheets extends React.PureComponent {
   @bind handleOnOk() {
     this.toggleModal()
     message.success('Google Sheet Document linked successfully!')
+  }
+  @bind handleUnlinkClick(linkedSheetId) {
+    service.linkedSheets.unlinkSheet({ linkedSheetId })
+  }
+  componentDidUpdate() {
+    const { status, value } = this.props.deleteProcess
+    if (value !== null) { // When value is null, do not display any message
+      switch (status) {
+        case 'pending': {
+          this.hideMsg = message.loading(`Unlinking sheet "${value}"...`, 0)
+          break
+        }
+        case 'rejected': {
+          this.hideMsg() // hide previous message
+          message.error(`Error while unlinking sheet: ${value}`)
+          break
+        }
+        default: {
+          this.hideMsg() // hide previous message
+          message.success(`Sheet "${value}" was unlinked successfully`)
+        }
+      }
+    }
+  }
+  componentDidMount() {
+    service.linkedSheets.fetchLinkedSheets()
   }
   render() {
     const columns = [{
@@ -63,41 +99,7 @@ class LinkedSheets extends React.PureComponent {
       ),
     }]
 
-    // linkedSheets contains dummy data that should be replaced later.
-    const linkedSheets = [{
-      name: 'spreadsheet 1',
-      spreadsheetId: '1dl2dX4K-CuospT5rHtK-GSr_dAOmVijz4k4aM750Ipg',
-    }, {
-      name: 'spreadsheet 2',
-      spreadsheetId: '1h4FhfXt1m2LfVS13YJuOWd9jSUu_xz5r-eFCwtzekhg',
-    }, {
-      name: 'spreadsheet 3',
-      spreadsheetId: '1_UMy96CeGkCrF5cNMA1cxLVP-E_xCV_Q-tZpziugf_g',
-    }, {
-      name: 'Voyage 4',
-      spreadsheetId: '4xxxxxxxxx',
-    }, {
-      name: 'Voyage 5',
-      spreadsheetId: '5xxxxxxxxx',
-    }, {
-      name: 'Voyage 6',
-      spreadsheetId: '6xxxxxxxxx',
-    }, {
-      name: 'Voyage 7',
-      spreadsheetId: '7xxxxxxxxx',
-    }, {
-      name: 'Voyage 8',
-      spreadsheetId: '8xxxxxxxxx',
-    }, {
-      name: 'Voyage 9',
-      spreadsheetId: '9xxxxxxxxx',
-    }, {
-      name: 'Voyage 10',
-      spreadsheetId: '10xxxxxxxx',
-    }, {
-      name: 'Voyage 11',
-      spreadsheetId: '11xxxxxxxx',
-    }]
+    const { linkedSheetsList, deleteProcess } = this.props
 
     return (
       <CommonView>
@@ -122,12 +124,22 @@ class LinkedSheets extends React.PureComponent {
         <Table
           rowKey="spreadsheetId"
           columns={columns}
-          dataSource={linkedSheets}
-          pagination={{ total: linkedSheets.length, pageSize: 5 }}
+          dataSource={linkedSheetsList.value}
+          pagination={{ total: linkedSheetsList.value.length, pageSize: 5 }}
+          locale={{ emptyText: 'No data' }}
+          loading={
+            linkedSheetsList.status === 'pending' ||
+            deleteProcess.status === 'pending'
+          }
         />
       </CommonView>
     )
   }
 }
 
-export default LinkedSheets
+export default withRouter(connect(
+  state => ({
+    linkedSheetsList: state.linkedSheets.linkedSheetsList,
+    deleteProcess: state.linkedSheets.deleteProcess,
+  }),
+)(LinkedSheets))
