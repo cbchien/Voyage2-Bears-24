@@ -71,9 +71,7 @@ class LinkedSheets extends Service {
     })
   }
 
-  async unlinkSheet(form) {
-    const { data } = form
-
+  async unlinkSheet(data) {
     this.dispatchAs(this.type.UNLINK_SHEET, {
       deleteProcess: pending(data),
     })
