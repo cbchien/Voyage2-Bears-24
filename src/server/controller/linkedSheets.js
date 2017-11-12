@@ -3,10 +3,6 @@ const linkedSheets = require('../model/linkedSheets')
 const gsheets = require('../model/gsheets')
 
 class LinkedSheets extends ServerNamespace {
-  async connection() {
-    // await this.fetchLinkedSheets()
-  }
-
   async fetchLinkedSheets(noData, reply) {
     try {
       const data = await linkedSheets.fetchLinkedSheets()
