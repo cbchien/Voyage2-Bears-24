@@ -59,7 +59,7 @@ class LinkedSheets extends Service {
         })
       } else {
         this.dispatchAs(this.type.ADD_LINKED_SHEET, {
-          addProcess: resolved(data.linkedSheetId),
+          addProcess: resolved(data),
         })
         // We set to null, so Component won't display the message box again when
         // it updates the next time (this is the initial state of addProcess)
@@ -81,12 +81,12 @@ class LinkedSheets extends Service {
       if (answer.hasError) {
         // Mark as { deleteProcess: { status: 'rejected', value: [ERROR] } }
         this.dispatchAs(this.type.UNLINK_SHEET, {
-          deleteProcess: rejected(answer.generalError.message),
+          deleteProcess: rejected(answer.generalError),
         })
       } else {
         // Mark as { deleteProcess: { status: 'resolved', value: [linkedSheetId] } }
         this.dispatchAs(this.type.UNLINK_SHEET, {
-          deleteProcess: resolved(data.linkedSheetId),
+          deleteProcess: resolved(data),
         })
         // We set to null, so Component won't display the message box again when
         // It updates the next time (this is the initial state of deleteProcess)
