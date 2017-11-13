@@ -1,7 +1,8 @@
 const gsheets = require('./gsheets')
 
 const LINKED_SHEETS_NAME = 'linkedSheets'
-const SETTINGS_DOC_ID = gsheets.settingsDocID
+// it seems like async functions are not able to read this gloabal const
+// const SETTINGS_DOC_ID = gsheets.settingsDocID
 
 class LinkedSheets {
   /**
@@ -9,6 +10,7 @@ class LinkedSheets {
    * @return {Promise} the `linkedSheets` sheet
    */
   async getLinkedSheetsSheet() {
+    const SETTINGS_DOC_ID = gsheets.settingsDocID
     const listOfSheets = await gsheets.getListOfSheets(SETTINGS_DOC_ID)
     const linkedSheetsSheet = listOfSheets.find(sheet => sheet.title === LINKED_SHEETS_NAME)
     if (!linkedSheetsSheet) {
@@ -23,6 +25,7 @@ class LinkedSheets {
    * [[name, linkedSheetId, metadata], ...]
    */
   async fetchLinkedSheets() {
+    const SETTINGS_DOC_ID = gsheets.settingsDocID
     const linkedSheetsSheet = await this.getLinkedSheetsSheet()
     const linkedSheetRows = await gsheets.getRows(SETTINGS_DOC_ID, linkedSheetsSheet)
     linkedSheetRows.shift()
@@ -38,6 +41,7 @@ class LinkedSheets {
    * @return {Promise} The result of calling appendRows
    */
   async addLinkedSheet(name, sheetID) {
+    const SETTINGS_DOC_ID = gsheets.settingsDocID
     const linkedSheetsSheet = await this.getLinkedSheetsSheet()
     return gsheets.appendRows(SETTINGS_DOC_ID, linkedSheetsSheet, [
       [name, sheetID],

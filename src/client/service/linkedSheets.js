@@ -37,7 +37,11 @@ class LinkedSheets extends Service {
         // { showAll: { status: "resolved", value: [...,{ LinkedSheet }] } }
         this.dispatchAs(this.type.FETCHED_SHEETS_LIST, {
           showAll: resolved(
-            answer.linkedSheetsList.map(LinkedSheet => ({ LinkedSheet })),
+            answer.linkedSheetsList.map(LinkedSheet => ({
+              Name: LinkedSheet[0],
+              SpreadsheetID: LinkedSheet[1],
+              Original: LinkedSheet[2],
+            })),
           ),
         })
       }
