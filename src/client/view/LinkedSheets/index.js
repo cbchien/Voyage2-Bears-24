@@ -67,7 +67,9 @@ class LinkedSheets extends React.PureComponent {
     }
   }
   componentDidMount() {
-    service.linkedSheets.fetchLinkedSheets()
+    if (this.props.linkedSheetsList.status === 'pending') {
+      service.linkedSheets.fetchLinkedSheets()
+    }
   }
   render() {
     // dataIndex needs to match server service respond JSON field ID

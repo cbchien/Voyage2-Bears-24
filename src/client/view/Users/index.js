@@ -65,7 +65,9 @@ class Users extends React.PureComponent {
     }
   }
   componentDidMount() {
-    service.users.fetchUsers()
+    if (this.props.userlist.status === 'pending') {
+      service.users.fetchUsers()
+    }
   }
   render() {
     const columns = [{
