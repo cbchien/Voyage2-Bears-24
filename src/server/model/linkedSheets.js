@@ -56,13 +56,15 @@ class LinkedSheets {
    * @return {Promise} The result of calling appendRows
    */
   async unlinkSheet(sheetID) {
+    const SETTINGS_DOC_ID = gsheets.settingsDocID
     const linkedSheets = await this.fetchLinkedSheets()
+    const linkedSheetsSheet = await this.getLinkedSheetsSheet()
     const indexToDelete = linkedSheets.findIndex(sheet => sheet[1] === sheetID)
     if (indexToDelete === -1) {
       throw new Error("Linked Sheet doesn't exist")
     }
     const adjustedIndex = indexToDelete + 2
-    return gsheets.deleteRows(SETTINGS_DOC_ID, linkedSheets, adjustedIndex, adjustedIndex)
+    return gsheets.deleteRows(SETTINGS_DOC_ID, linkedSheetsSheet, adjustedIndex, adjustedIndex)
   }
 }
 

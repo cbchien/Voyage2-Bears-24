@@ -51,17 +51,17 @@ class LinkedSheets extends React.PureComponent {
     if (value !== null) { // When value is null, do not display any message
       switch (status) {
         case 'pending': {
-          this.hideMsg = message.loading(`Unlinking sheet "${value}"...`, 0)
+          this.hideMsg = message.loading(`Unlinking sheet "${value.linkedSheetId}"...`, 0)
           break
         }
         case 'rejected': {
           this.hideMsg() // hide previous message
-          message.error(`Error while unlinking sheet: ${value}`)
+          message.error(`Error while unlinking sheet: ${value.linkedSheetId}`)
           break
         }
         default: {
           this.hideMsg() // hide previous message
-          message.success(`Sheet "${value}" was unlinked successfully`)
+          message.success(`Sheet "${value.linkedSheetId}" was unlinked successfully`)
         }
       }
     }
@@ -70,27 +70,28 @@ class LinkedSheets extends React.PureComponent {
     service.linkedSheets.fetchLinkedSheets()
   }
   render() {
+    // dataIndex needs to match server service respond JSON field ID
     const columns = [{
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'Name',
+      key: 'Name',
     }, {
       title: 'Spreadsheet ID',
-      dataIndex: 'spreadsheetId',
-      key: 'spreadsheetId',
+      dataIndex: 'SpreadsheetID',
+      key: 'SpreadsheetID',
       render: id => (
         <a href={`https://docs.google.com/spreadsheets/d/${id}`}>{id}</a>
       ),
     }, {
       title: 'Action',
-      dataIndex: 'spreadsheetId',
+      dataIndex: 'SpreadsheetID',
       key: 'action',
       fixed: 'right',
       width: 100,
-      render: id => (
+      render: record => (
         <Popconfirm
           title="Are you sure you want to unlink this sheet?"
-          onConfirm={() => { message.success(`Unlinked ${id}`) }}
+          onConfirm={() => this.handleUnlinkClick(record)}
           okText="Yes"
           cancelText="No"
         >
@@ -100,7 +101,6 @@ class LinkedSheets extends React.PureComponent {
     }]
 
     const { linkedSheetsList, deleteProcess } = this.props
-
     return (
       <CommonView>
         <Row type="flex" justify="space-between">
@@ -122,7 +122,7 @@ class LinkedSheets extends React.PureComponent {
           </Col>
         </Row>
         <Table
-          rowKey="spreadsheetId"
+          rowKey="SpreadsheetID"
           columns={columns}
           dataSource={linkedSheetsList.value}
           pagination={{ total: linkedSheetsList.value.length, pageSize: 5 }}
@@ -139,7 +139,7 @@ class LinkedSheets extends React.PureComponent {
 
 export default withRouter(connect(
   state => ({
-    linkedSheetsList: state.linkedSheets.linkedSheetsList,
+    linkedSheetsList: state.linkedSheets.showAll,
     deleteProcess: state.linkedSheets.deleteProcess,
   }),
 )(LinkedSheets))
