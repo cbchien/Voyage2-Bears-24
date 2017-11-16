@@ -60,7 +60,8 @@ class LinkedSheets {
       throw new Error("Linked Sheet doesn't exist")
     }
     const adjustedIndex = indexToDelete + 2
-    return gsheets.deleteRows(this.SETTINGS_DOC_ID(), linkedSheetsSheet, adjustedIndex, adjustedIndex)
+    return gsheets.deleteRows(this.SETTINGS_DOC_ID(),
+      linkedSheetsSheet, adjustedIndex, adjustedIndex)
   }
 }
 
