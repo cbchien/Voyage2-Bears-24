@@ -32,7 +32,6 @@ class LinkedSheetModal extends React.Component {
     this.orgForm.dispatchEvent(new Event('submit'))
   }
   @bind whenStateChanges(state) {
-    console.log(state)
     if (state === 'done!') {
       message.success('Sheet linked successfully!')
       this.props.onOk()
