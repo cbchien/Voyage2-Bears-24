@@ -68,6 +68,7 @@ class LinkedSheets extends Service {
         )
       } else {
         changeState('done!')
+        this.fetchLinkedSheets()
       }
     })
   }
