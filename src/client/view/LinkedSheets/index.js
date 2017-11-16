@@ -118,7 +118,7 @@ class LinkedSheets extends React.PureComponent {
             </Button>
             <LinkedSheetModal
               onCancel={this.toggleModal}
-              onOk={this.handleOnOk}
+              onOk={this.toggleModal}
               visible={this.state.isModalVisible}
             />
           </Col>

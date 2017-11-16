@@ -49,7 +49,11 @@ class LinkedSheets extends Service {
   }
 
   async addLinkedSheet(form) {
-    const { data } = form
+    const {
+      data,
+      replyForm,
+      changeState,
+    } = form
 
     this.dispatchAs(this.type.ADD_LINKED_SHEET, {
       showAll: pending([]),
@@ -58,19 +62,12 @@ class LinkedSheets extends Service {
 
     this.askServer('addLinkedSheet', data, (answer) => {
       if (answer.hasError) {
-        this.dispatchAs(this.type.ADD_LINKED_SHEET, {
-          addProcess: rejected(answer.generalError),
-        })
+        replyForm(
+          answer.generalError, // Display in ServiceForm.Alert
+          answer.fieldErrors, // Display in Inputs (Done Automatically)
+        )
       } else {
-        this.dispatchAs(this.type.ADD_LINKED_SHEET, {
-          addProcess: resolved(data),
-        })
-        // We set to null, so Component won't display the message box again when
-        // it updates the next time (this is the initial state of addProcess)
-        this.dispatchAs(this.type.ADD_LINKED_SHEET, {
-          addProcess: resolved(null),
-        })
-        this.fetchLinkedSheets()
+        changeState('done!')
       }
     })
   }

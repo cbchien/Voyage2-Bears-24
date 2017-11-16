@@ -3,11 +3,13 @@ import propTypes from 'prop-types'
 import {
   Modal,
   Input,
+  message,
 } from 'antd'
 import {
   ServiceForm,
   bind,
 } from '../../component'
+import service from '../../service'
 
 class LinkedSheetModal extends React.Component {
   static propTypes = {
@@ -19,17 +21,44 @@ class LinkedSheetModal extends React.Component {
     name: { required: true, label: 'Name' },
     url: { required: true, label: 'Spreadsheet URL' },
   }
+  state = {
+    generalError: {},
+    formState: null,
+  }
   @bind handleRef(ref) {
     this.orgForm = ref.refs.input.form
   }
   @bind handleOnOk() {
     this.orgForm.dispatchEvent(new Event('submit'))
   }
+  @bind whenStateChanges(state) {
+    console.log(state)
+    if (state === 'done!') {
+      message.success('Sheet linked successfully!')
+      this.props.onOk()
+      this.orgForm.name.value = ''
+      this.orgForm.url.value = ''
+    } else {
+      this.setState({
+        formState: state,
+      })
+    }
+  }
+  /**
+   * The general error is handled manually since we can choose to display it or not
+   * @param {object} error an object representing the error { message, type }
+   */
+  @bind whenGeneralError(error) {
+    this.setState({
+      generalError: error,
+    })
+  }
   render() {
     const {
       visible,
       onCancel,
     } = this.props
+    const { generalError, formState } = this.state
 
     return (
       <Modal
@@ -40,15 +69,22 @@ class LinkedSheetModal extends React.Component {
         onCancel={onCancel}
         onOk={this.handleOnOk}
       >
+        <ServiceForm.Alert
+          message={generalError.message}
+          type={generalError.type}
+        />
         <ServiceForm
           layout="vertical"
-          onSubmit={this.props.onOk}
           itemLayout={null}
           rules={this.rules}
+          onSubmit={service.linkedSheets.addLinkedSheet}
+          onStateChange={this.whenStateChanges}
+          onError={this.whenGeneralError}
+
         >
           <Input type="hidden" ref={this.handleRef} />
-          <Input name="name" />
-          <Input name="url" />
+          <Input name="name" readOnly={formState === 'loading'} />
+          <Input name="url" readOnly={formState === 'loading'} />
         </ServiceForm>
       </Modal>
     )
