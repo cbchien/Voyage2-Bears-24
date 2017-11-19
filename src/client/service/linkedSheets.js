@@ -56,7 +56,6 @@ class LinkedSheets extends Service {
     } = form
 
     this.dispatchAs(this.type.ADD_LINKED_SHEET, {
-      showAll: pending([]),
       addProcess: pending(data),
     })
 
@@ -66,6 +65,10 @@ class LinkedSheets extends Service {
           answer.generalError, // Display in ServiceForm.Alert
           answer.fieldErrors, // Display in Inputs (Done Automatically)
         )
+        this.dispatchAs(this.type.ADD_LINKED_SHEET, {
+          addProcess: rejected(data),
+        })
+        changeState('error')
       } else {
         changeState('done!')
         this.fetchLinkedSheets()
