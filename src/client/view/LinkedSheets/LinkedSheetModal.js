@@ -54,10 +54,21 @@ class LinkedSheetModal extends React.Component {
       generalError: error,
     })
   }
+
+  /**
+   * clear values and reset generalError state when exiting Modal
+   */
+  @bind clearValueWhenCancel() {
+    this.props.onCancel()
+    this.setState({
+      generalError: {},
+    })
+    this.orgForm.name.value = ''
+    this.orgForm.url.value = ''
+  }
   render() {
     const {
       visible,
-      onCancel,
     } = this.props
     const { generalError, formState } = this.state
 
@@ -67,7 +78,7 @@ class LinkedSheetModal extends React.Component {
         title="Link a new spreadsheet"
         okText="Add Link"
         cancelText="Cancel"
-        onCancel={onCancel}
+        onCancel={this.clearValueWhenCancel}
         onOk={this.handleOnOk}
       >
         <ServiceForm.Alert

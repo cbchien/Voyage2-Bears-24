@@ -55,14 +55,18 @@ class Users extends ServerNamespace {
 
         // Check if password is empty or less than 6 chars
         if (String(password).trim().length <= 6) {
-          // Reply with custom error message
+          // Reply in generalError form to be display in serviceForm
           reply({
             hasError: true,
             fieldErrors: {
               password: {
-                validateStatus: 'error',
+                validateStatus: 'warning',
                 help: 'Password must contain more than 6 valid characters',
               },
+            },
+            generalError: {
+              message: 'Please make sure password is more than 6 valid characters',
+              type: 'error',
             },
           })
         } else {
